@@ -1,0 +1,106 @@
+# Main parts of the program
+
+program = function_definition, { function_definition | class_definition };
+
+function_definition = "define", identifier, "(", parameters, ")", block;
+class_definition = "class", identifier, class_block;
+
+
+parameters = [ { this_kw | identifier }, { ",", identifier } ] ;
+block = "{", {statement}, "}" ;
+class_block = {function_definition} ;
+
+statement = conditional | loop | function_call | return | assign | comment | reflect;
+
+this_kw = "this";
+
+# basic instructions
+
+conditional = "if", or_expression, block,
+                { "else if", or_expression, block },
+                ["else", block];
+
+loop = foreach_loop | while_loop;
+
+assign = complex_var_getter, "=", or_expression, ";";
+
+return = "return", or_expression, ";" ;
+reflect = "reflect", ["recursive"], or_expression, ";" ;
+
+comment = '#', comment_text ;
+
+function_call = [this_value_getter], [value_getter], identifier, rest_function_call, ";" ;
+
+# more into details
+foreach_loop = "foreach" identifier "in", or_expression, block;
+while_loop = "while", or_expression, block;
+
+value_getter = [this_value_getter], basic_value_getter, { access_oper, basic_value_getter };
+this_value_getter = this_kw, access_oper;
+basic_value_getter = identifier, [rest_function_call], [ "[", add_expression, "]" ];
+no_call_value_getter = identifier, [ '[' add_expression ']' ];
+complex_var_getter = [this_value_getter], [value_getter], no_call_value_getter;
+
+rest_function_call = "(", arguments, ")" ;
+
+arguments = { (["by_ref"], or_expression) };
+
+comment_text = { special_char | string | number | other_char }, newline;
+
+# Expressions (with operator priorities (backward))
+or_expression = and_expression, { or_oper, and_expression } ;
+and_expression = equality_expression, { and_oper equality_expression } ;
+equality_expression = relation_expression, { eq_oper, equality_expression } ;
+relation_expression = add_expression, { rel_oper, add_expression };
+
+add_expression = mult_expression, { add_oper, mult_expression };
+mult_expression = unary_expression, { mult_oper, unary_expression };
+
+unary_expression = general_value | not_unary_expression | negative_unary_expression;
+
+not_unary_expression = not_oper, unary_expression;
+negative_unary_expression = negative_oper, unary_expression;
+general_value = value | ( "(", or_expression, ")" );
+
+
+# Operators
+access_oper = "." ;
+or_oper = "||" ;
+and_oper = "&&" ;
+eq_oper = "==" | "!=";
+rel_oper = ">" | "<" | "<=" | ">=" ;
+mult_oper_general = mult_oper | modulo_oper ;
+mult_oper = "*" | "/" ;
+modulo_oper = "%" ;
+
+neg_oper = "-" ;
+not_oper = "!" ;
+
+# Values
+value = literal | list_value | complex_var_getter;
+
+list_value = "[", [or_expression, { ",", or_expression } ], "]" ;
+
+
+identifier = (underscore | dollar | letter), {(letter | digit | underscore)} ;
+
+
+# Literals
+literal = string | number | bool ;
+
+string = "\"", {character}, "\"" ;
+number = non_zero_number | "0" ;
+bool = "true" | "false" ;
+
+non_zero_number = non_zero_digit, {digit};
+
+digit = non_zero_digit | "0";
+non_zero_digit = '1' - '9';
+
+letter = 'A' - 'Z' | 'a' - 'z';
+
+special_char = ";" | "\"" | "'" | "-" | "." | "," | "/" | "\\" | underscore | dollar_sign | whitespace | "#" ;
+
+newline = "\n";
+underscore = "_";
+
