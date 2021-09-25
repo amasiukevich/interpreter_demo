@@ -10,6 +10,7 @@ class KeywordMapper:
         "if" : TokenType.IF,
         "else" : TokenType.ELSE,
         "foreach" : TokenType.FOREACH,
+        "while": TokenType.WHILE,
         "in" : TokenType.IN,
         "return" : TokenType.RETURN,
         "reflect" : TokenType.REFLECT,

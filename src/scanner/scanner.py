@@ -57,14 +57,15 @@ class Scanner:
             self.source.read_char()
 
     def construct_eof(self):
-
+        """
+        Recognizes EOF token
+        """
         not_existing_character = (self.source.get_char() == -1)
 
         if not_existing_character:
-            self.token = Token(token_type=TokenType.EOF, position=self.token_position)
+            self.token = Token(token_type=TokenType.EOF, position=self.token_position, value=None)
 
         return not_existing_character
-
 
     def construct_single_char_oper(self):
 
@@ -81,6 +82,10 @@ class Scanner:
 
     def construct_double_char_oper(self):
 
+        """
+        Recognizes double-char tokens as well as some single-char tokens
+        :return:    is_recognized - bool
+        """
         is_recognized = True
         if self.source.get_char() == ">":
             # TODO: Can I refactor this ???
