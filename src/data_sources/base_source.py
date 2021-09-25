@@ -11,10 +11,13 @@ class BaseSource(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def get_curr_char(self):
+    def get_char(self):
         pass
 
     @abc.abstractmethod
-    @staticmethod
     def advance_position(self, char):
+        pass
+
+    @abc.abstractmethod
+    def get_position(self):
         pass

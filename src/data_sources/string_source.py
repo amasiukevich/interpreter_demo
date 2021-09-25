@@ -9,7 +9,7 @@ class StringSource(BaseSource):
 
         self.reader = string_stream
         self.position = Position()
-        self.character = self.read_char
+        self.read_char()
 
     # TODO: refactor this methods to the "text_source" class ???
     def read_char(self) -> Optional[str]:
@@ -19,10 +19,10 @@ class StringSource(BaseSource):
         char = self.reader.read(1)
         if char:
             self.advance_position(char)
+            self.character = char
+        else:
+            self.character = -1
 
-        return char
-
-    @staticmethod
     def advance_position(self, char):
 
         if char == "\n":
@@ -30,5 +30,8 @@ class StringSource(BaseSource):
         else:
             self.position.advance_column()
 
-    def get_curr_char(self):
+    def get_char(self):
         return self.character
+
+    def get_position(self):
+        return self.position

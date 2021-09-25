@@ -38,7 +38,7 @@ class TokenType(Enum):
     OPEN_PARENTHESIS = auto()           # (
     CLOSING_PARENTHESIS = auto()        # )
     OPEN_BRACKET = auto()               # [
-    CLOSING_BRACKE = auto()             # ]
+    CLOSING_BRACKET = auto()             # ]
     OPEN_CURLY_BRACKET = auto()         # {
     CLOSING_CURLY_BRACKET = auto()      # }
     SEMICOLON = auto()                  # ;

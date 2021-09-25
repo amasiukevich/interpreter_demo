@@ -8,7 +8,6 @@ class Token:
     MAX_IDENTIFIER_LENGTH = 120
     MAX_NUMBER = 2 ** 32
 
-    # TODO: add type annotations
     def __init__(self, token_type: TokenType, position: Position, value: str=None):
 
         self.token_type = token_type
@@ -22,9 +21,10 @@ class Token:
         else:
             return self.token_type == other.token_type and self.position == other.position
 
-    # TODO: add magic methods
     def __str__(self):
-        pass
+        return f"Type: {self.token_type}\n" \
+               f"Position: {self.position}\n" \
+               f"Value: {self.value}\n"
 
     def __repr__(self):
-        pass
+        return self.__str__()

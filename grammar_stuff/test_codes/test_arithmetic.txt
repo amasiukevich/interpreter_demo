@@ -1,0 +1,5 @@
+define main() {
+    discount_perc = 10;
+    init_price = 100;
+    price_after_discount = init_price * (100 - discount_perc) / 100;
+}
