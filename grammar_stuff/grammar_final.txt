@@ -88,8 +88,16 @@ identifier = (underscore | dollar | letter), {(letter | digit | underscore)} ;
 # Literals
 literal = string | number | bool ;
 
+# Integer is the same as integer part
+
 string = "\"", {character}, "\"" ;
-number = non_zero_number | "0" ;
+
+number = (integer_part | float_number) ;
+float_number = integer_part, ".", fractional_part;
+
+integer_part = non_zero_number | "0" ;
+fractional_part = digit, {digit};
+
 bool = "true" | "false" ;
 
 non_zero_number = non_zero_digit, {digit};
