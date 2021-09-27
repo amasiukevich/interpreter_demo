@@ -86,66 +86,53 @@ class Scanner:
         """
         is_recognized = True
         if self.source.get_char() == ">":
-            # TODO: Can I refactor this ???
-            self.source.read_char()
-            second_char = self.source.get_char()
-            if second_char == "=":
-                self.token = Token(TokenType.GREATER_EQUAL, position=self.token_position, value=">=")
-                self.source.read_char()
-            else:
-                self.token = Token(TokenType.GREATER, position=self.token_position, value=">")
+            self.token = self.decide_single_double_char(">", TokenType.GREATER, TokenType.GREATER_EQUAL)
 
         elif self.source.get_char() == "<":
-            # TODO: Can I refactor this ???
-            self.source.read_char()
-            second_char = self.source.get_char()
-            if second_char == "=":
-                self.token = Token(TokenType.LESS_EQUAL, position=self.token_position, value="<=")
-                self.source.read_char()
-            else:
-                self.token = Token(TokenType.LESS, position=self.token_position, value="<")
+            self.token = self.decide_single_double_char("<", TokenType.LESS, TokenType.LESS_EQUAL)
 
         elif self.source.get_char() == "!":
-            # TODO: Can I refactor this ???
-            self.source.read_char()
-            second_char = self.source.get_char()
-            if second_char == "=":
-                self.token = Token(TokenType.NOT_EQUAL, position=self.token_position, value="!=")
-                self.source.read_char()
-            else:
-                self.token = Token(TokenType.NOT, position=self.token_position, value="!")
+            self.token = self.decide_single_double_char("!", TokenType.NOT, TokenType.NOT_EQUAL)
 
         elif self.source.get_char() == "=":
-            # TODO: Can I refactor this ???
-            self.source.read_char()
-            second_char = self.source.get_char()
-            if second_char == "=":
-                self.token = Token(TokenType.EQUAL, position=self.token_position, value="==")
-                self.source.read_char()
-            else:
-                self.token = Token(TokenType.ASSIGN, position=self.token_position, value="=")
+            self.token = self.decide_single_double_char("=", TokenType.ASSIGN, TokenType.EQUAL)
 
         elif self.source.get_char() == "&":
-            # TODO: Can I refactor this ???
-            self.source.read_char()
-            second_char = self.source.get_char()
-            if second_char == "&":
-                self.token = Token(TokenType.AND, position=self.token_position, value="&&")
-                self.source.read_char()
-            else:
-                is_recognized = False
+            is_recognized = self.decide_double_char_only("&", TokenType.AND)
 
         elif self.source.get_char() == "|":
-            # TODO: Can I refactor this ???
-            self.source.read_char()
-            second_char = self.source.get_char()
-            if second_char == "|":
-                self.token = Token(TokenType.OR, position=self.token_position, value="||")
-                self.source.read_char()
-            else:
-                is_recognized = False
+            is_recognized = self.decide_double_char_only("|", TokenType.OR)
+
         else:
             is_recognized = False
+
+        return is_recognized
+
+    # TODO: string of one symbol exactly
+    def decide_single_double_char(self, char: str, single_token_type: TokenType, double_token_type: TokenType):
+
+        self.source.read_char()
+        second_char = self.source.get_char()
+        if second_char == "=":
+            token = Token(token_type=double_token_type, position=self.token_position, value=char+second_char)
+            self.source.read_char()
+        else:
+            token = Token(token_type=single_token_type, position=self.token_position, value=char)
+
+        return token
+
+
+    # TODO: string of one symbol exactly
+    def decide_double_char_only(self, char: str, double_token_type: TokenType):
+
+        self.source.read_char()
+        is_recognized = (self.source.get_char() == char)
+
+        if is_recognized:
+            self.token = Token(token_type=double_token_type,
+                               position=self.token_position,
+                               value=char+self.source.get_char())
+            self.source.read_char()
 
         return is_recognized
 

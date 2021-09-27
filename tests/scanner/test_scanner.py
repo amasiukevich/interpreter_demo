@@ -246,3 +246,6 @@ class TestScanner(unittest.TestCase):
             the_exception.get_message(),
             exception_text
         )
+
+
+
