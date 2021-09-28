@@ -13,6 +13,9 @@ class Token:
         self.token_type = token_type
         self.position = position
         self.value = value
+
+    def get_token_type(self):
+        return self.token_type
     
     def __eq__(self, other):
         if not isinstance(other, Token):
