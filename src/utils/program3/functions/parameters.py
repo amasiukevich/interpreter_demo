@@ -1,22 +1,31 @@
-from typing import List, Optional
+from typing import List
 
 from src.utils.program3.node import Node
 from src.utils.helpers import check_unique_names
 
+
 class Parameters(Node):
 
-    def __init__(self, has_this: bool, param_names: List[Optional, str]):
+    def __init__(self, has_this: bool = False, param_names: List[str] = []):
 
-        # TODO: Custom exception here
         if not check_unique_names(param_names):
+            # TODO: Custom exception here
             raise Exception("Param names should be unique")
 
+        self.is_method = has_this
         self.param_names = param_names
 
-    # TODO: Add fancy representation of the class
     def __str__(self):
-        pass
 
-    # TODO: Make it useful for testing
+        to_param_string = []
+        if self.is_method:
+            to_param_string = ["this"] + self.param_names
+
+        param_string = ", ".join(to_param_string)
+
+        return param_string
+
     def __repr__(self):
-        pass
+        return f"Parameters(is_method={self.is_method}, n_params={len(self.param_names)})"
+
+    # TODO: Modify string representation by external visitor

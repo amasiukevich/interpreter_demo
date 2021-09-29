@@ -9,10 +9,25 @@ class ClassBlock(Node):
     def __init__(self, methods: List[Function, Optional]):
         self.methods = methods
 
-    # TODO: Make a fancy representation of the class
-    def __str__(self):
-        pass
+    @staticmethod
+    def validate_class_block(identifier: str, methods: List[Function, Optional]) -> bool:
 
-    # TODO: Make it useful for testing
+        is_valid = True
+        if len(methods) > 0:
+            is_valid = (identifier in [method.identifier for method in methods])
+        return is_valid
+
+    def __str__(self):
+
+        class_block_string = "{\n"
+        for method in self.methods:
+            class_block_string += f"\t{method}\n"
+
+        class_block_string += "}\n"
+
+        return class_block_string
+
     def __repr__(self):
-        pass
+        return f"ClassBlock({len(self.methods)})"
+
+    # TODO: regulate tabs in fancy string representation by external visitor

@@ -6,13 +6,17 @@ class Class(Node):
 
     def __init__(self, identifier: str, class_block: ClassBlock):
 
-        self.identifier = identifier
-        self.class_block = class_block
+        if  ClassBlock.validate_class_block(identifier, class_block.methods):
+            self.identifier = identifier
+            self.class_block = class_block
+        else:
+            # TODO: Custom exception here
+            raise Exception("Class block should contain the costructor of the same name as class")
 
-    # TODO: Make fancy representation of the class here
     def __str__(self):
-        pass
+        return f"class {self.identifier} {self.class_block}"
 
-    # TODO: Make it useful for testing
     def __repr__(self):
-        pass
+        return f"Class(identifier=\"{self.identifier}\")"
+
+    # TODO: regulate tabs in string representation using external visitor

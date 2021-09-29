@@ -1,17 +1,16 @@
-from typing import List, Optional
+from typing import List
 
 from src.utils.program3.node import Node
 from src.utils.program3.functions.argument import Argument
 
+
 class Arguments(Node):
 
-    def __init__(self, arguments: List[Argument, Optional]):
+    def __init__(self, arguments: List[Argument] = []):
         self.arguments = arguments
 
-    # TODO: Add fancy representation there
     def __str__(self):
-        pass
+        return ", ".join([str(argument) for argument in self.arguments])
 
-    # TODO: Make it useful for testing
     def __repr__(self):
-        pass
+        return f"Arguments(n_args={len(self.arguments)})"

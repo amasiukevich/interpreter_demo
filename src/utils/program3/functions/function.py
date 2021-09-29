@@ -2,6 +2,7 @@ from src.utils.program3.node import Node
 from src.utils.program3.functions.parameters import Parameters
 from src.utils.program3.block import Block
 
+
 class Function(Node):
 
     def __init__(self, identifier: str, params: Parameters, block: Block):
@@ -9,10 +10,11 @@ class Function(Node):
         self.params = params
         self.block = block
 
-    # TODO: Add fancy representation of the class
     def __str__(self):
-        pass
+        return f"define {self.identifier}({self.params}) {self.block}"
 
-    # TODO: Make it useful for testing
     def __repr__(self):
-        pass
+        return f"Function(identifier=\"{self.identifier}\", n_params={len(self.params)}, block={self.block.__repr__()}"
+
+
+    # TODO: modify the tabs using external visitor
