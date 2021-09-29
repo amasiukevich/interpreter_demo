@@ -1,7 +1,13 @@
-from src.utils.program3.node import Node
+from src.utils.program3.statements.statement import Statement
 
 
-class Comment(Node):
+class Comment(Statement):
 
-    def __init__(self):
-        pass
+    def __init__(self, comment_body: str):
+        self.body = comment_body
+
+    def __str__(self):
+        return f"# {self.body}"
+
+    def __repr__(self):
+        return f"Comment(body=\"{self.body}\")"

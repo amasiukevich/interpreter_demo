@@ -1,5 +1,5 @@
-from src.utils.program3.node import Node
+from src.utils.program3.statements.statement import Statement
 
 
-class Loop(Node):
+class Loop(Statement):
     pass
