@@ -5,15 +5,15 @@ from src.utils.program3.expressions.operators.operator import Operator
 from typing import List
 
 
-class AddExpression(ArithmeticExpression):
+class MultiplyExpression(ArithmeticExpression):
 
-    # PLUS AND MINUS
+    # MULTIPLY, DIVIDE AND MODULO
 
     def __init__(self, expressions: List[Expression], operators: List[Operator]):
         super().__init__(expressions, operators)
         self.expressions = expressions
-        self.operators = operators
+        self.operator = operators
 
     def __repr__(self):
         operators_string = "[" + ", ".join([str(operator) for operator in self.operators]) + "]"
-        return f"AddExpression(operator={operators_string}, {len(self.expressions)})"
+        return f"MultiplyExpression(operators={operators_string}, {len(self.expressions)})"

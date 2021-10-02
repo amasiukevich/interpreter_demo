@@ -12,10 +12,8 @@ class UnaryExpression(Expression):
         if operator:
             self.operator = operator
 
-    # TODO: Make fancy representation of the expression
-    def __str__(self):
-        pass
 
-    # TODO: Make it good for testing
-    def __repr__(self):
-        pass
+    def __str__(self):
+        return f"{self.operator}({self.expression})"
+
+    # repr is unique

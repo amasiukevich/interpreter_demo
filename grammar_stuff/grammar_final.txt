@@ -24,22 +24,24 @@ loop = foreach_loop | while_loop;
 
 assign = complex_var_getter, "=", or_expression, ";";
 
-return = "return", or_expression, ";" ;
+return = "return", expression, ";" ;
 reflect = "reflect", ["recursive"], or_expression, ";" ;
 
 comment = '#', comment_text ;
 
-function_call = [this_value_getter], [value_getter], identifier, rest_function_call, ";" ;
+function_call = [this_value_getter], [rest_value_getter], identifier, rest_function_call, ";" ;
 
 # more into details
-foreach_loop = "foreach" identifier "in", or_expression, block;
+foreach_loop = "foreach", identifier, "in", expression, block;
 while_loop = "while", or_expression, block;
 
-value_getter = [this_value_getter], basic_value_getter, { access_oper, basic_value_getter };
+value_getter = [this_value_getter], rest_value_getter;
+rest_value_getter = basic_value_getter, {access_oper, basic_value_getter} ;
+
 this_value_getter = this_kw, access_oper;
 basic_value_getter = identifier, [rest_function_call], [ "[", add_expression, "]" ];
 no_call_value_getter = identifier, [ '[' add_expression ']' ];
-complex_var_getter = [this_value_getter], [value_getter], no_call_value_getter;
+complex_var_getter = [this_value_getter], [rest_value_getter, {access_oper}], no_call_value_getter;
 
 rest_function_call = "(", arguments, ")" ;
 
@@ -48,6 +50,7 @@ arguments = { (["by_ref"], or_expression) };
 comment_text = { special_char | string | number | other_char }, newline;
 
 # Expressions (with operator priorities (backward))
+expression = or_expression | value;
 or_expression = and_expression, { or_oper, and_expression } ;
 and_expression = equality_expression, { and_oper equality_expression } ;
 equality_expression = relation_expression, { eq_oper, equality_expression } ;

@@ -10,7 +10,7 @@ class Conditional(Statement):
     def __init__(self, expressions: List[Expression], blocks: List[Block]):
 
         if Conditional.validate_expressions(expressions) and \
-                Conditional.validate_expressions(blocks) and \
+                Conditional.validate_blocks(blocks) and \
                 Conditional.validate_matching(expressions, blocks):
             self.expressions = expressions
             self.blocks = blocks

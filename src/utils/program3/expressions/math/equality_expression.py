@@ -9,14 +9,10 @@ class EqualityExpression(ArithmeticExpression):
     # Equal and Not equal
 
     def __init__(self, expressions: List[Expression], operators: List[Operator]):
-
-        if ArithmeticExpression.validate_arithmetic_expression(expressions, operators):
-
-            self.expressions = expressions
-            self.operators = operators
+        super().__init__(expressions, operators)
+        self.expressions = expressions
+        self.operators = operators
 
     def __repr__(self):
-
-        # TODO: Some error there
         operators_string = "[" + ", ".join([str(oper) for oper in self.operators]) + "]"
         return f"EqualityExpression(operators={operators_string}, {len(self.expressions)})"

@@ -8,27 +8,19 @@ class ArithmeticExpression(Expression):
 
     def __init__(self, expressions: List[Expression], operators: List[Operator]):
 
-        if self.validate_arithmetic_expression(expressions, operators):
+        if Expression.validate_expression_types(expressions) and \
+            Operator.validate_operator_types(operators) and \
+                ArithmeticExpression.validate_differs_in_one(expressions, operators):
+
             self.expressions = expressions
-            self.operator = operators
+            self.operators = operators
 
     @staticmethod
-    def validate_arithmetic_expression(expressions: List[Expression], operators: List[Operator]) -> bool:
-
-        is_valid = True
-        if len(expressions) > 0 and not all([isinstance(expr, Expression) for expr in expressions]):
-            # TODO: Custom exception here
-            raise Exception("All expression components must be of Expression datatype")
-
-        if len(operators) > 0 and not all([isinstance(expr, Expression) for expr in expressions]):
-            # TODO: Custom exception hera
-            raise Exception("All operators should be of Operator datatype")
-
+    def validate_differs_in_one(expressions, operators):
         if len(expressions) - len(operators) != 1:
             # TODO: Custom exception here
-            raise Exception("Number of exception components should be greater than number of operators by 1 exactly")
-
-        return is_valid
+            raise Exception(f"Number of exception components should be greater than number of operators by exactly 1")
+        return True
 
     def __str__(self):
 
