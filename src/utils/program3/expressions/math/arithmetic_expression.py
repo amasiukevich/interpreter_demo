@@ -1,5 +1,6 @@
 from src.utils.program3.expressions.expression import Expression
 from src.utils.program3.expressions.operators.operator import Operator
+from src.exceptions.validation_exception import ValidationException
 
 from typing import List
 
@@ -18,8 +19,9 @@ class ArithmeticExpression(Expression):
     @staticmethod
     def validate_differs_in_one(expressions, operators):
         if len(expressions) - len(operators) != 1:
-            # TODO: Custom exception here
-            raise Exception(f"Number of exception components should be greater than number of operators by exactly 1")
+            raise ValidationException(
+                f"Number of exception components should be greater than number of operators by exactly 1"
+            )
         return True
 
     def __str__(self):

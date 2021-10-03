@@ -1,4 +1,8 @@
+from src.exceptions.validation_exception import ValidationException
 from src.utils.program3.expressions.expression import Expression
+from src.utils.program3.expressions.math.unary_expression import UnaryExpression
+from src.utils.program3.expressions.math.arithmetic_expression import ArithmeticExpression
+from src.utils.program3.expressions.math.logical_expression import LogicalExpression
 from src.utils.program3.expressions.math.add_expression import AddExpression
 from src.utils.program3.expressions.math.multiply_expression import MultiplyExpression
 from src.utils.program3.expressions.math.and_expression import AndExpression
@@ -11,6 +15,7 @@ from src.utils.program3.expressions.operators.less_oper import LessOperator
 
 from src.utils.program3.expressions.operators.minus_oper import MinusOperator
 from src.utils.program3.expressions.operators.not_equal_oper import NotEqualOperator
+from src.utils.program3.expressions.operators.or_operator import OrOperator
 from src.utils.program3.values.literals.bool_literal import BoolLiteral
 from src.utils.program3.expressions.operators.divide_oper import DivideOperator
 from src.utils.program3.values.literals.int_literal import IntLiteral
@@ -104,9 +109,38 @@ class TestExpressions(unittest.TestCase):
         repr_string = "RelationExpression(operators=[>=], 2)"
         self.assertEqual(rel_expression.__repr__(), repr_string)
 
-    # TODO: Use Exceptions there
     def test_arithmetic_expression_creation_fail(self):
-        pass
+
+        list_of_exception_strings = []
+        list_to_compare = [
+            "ValidationException: All expression components should be of Expression datatype",
+            "ValidationException: All operator components should be of Operator datatype",
+            "ValidationException: Number of exception components should be greater than number of operators by exactly 1"
+        ]
+
+        with self.assertRaises(ValidationException) as context:
+            AddExpression([None, None], PlusOperator())
+
+        the_exception = context.exception
+
+        list_of_exception_strings.append(the_exception.get_message())
+
+        with self.assertRaises(ValidationException) as context2:
+            MultiplyExpression([IntLiteral(10), IntLiteral(12)], [None])
+
+        the_exception = context2.exception
+        list_of_exception_strings.append(the_exception.get_message())
+
+        with self.assertRaises(ValidationException) as context3:
+            EqualityExpression([IntLiteral(2), IntLiteral(3), IntLiteral(4)], [EqualityOperator()])
+
+        the_exception = context3.exception
+        list_of_exception_strings.append(the_exception.get_message())
+
+        self.assertListEqual(
+            list_of_exception_strings,
+            list_to_compare
+        )
 
     def test_and_expression_str(self):
 
@@ -144,9 +178,23 @@ class TestExpressions(unittest.TestCase):
         repr_string = "OrExpression(n_expressions=2)"
         self.assertEqual(or_expression.__repr__(), repr_string)
 
-    # TODO: Use exceptions there
     def test_logical_expression_creation_fail(self):
-        pass
+
+        list_of_exception_strings = []
+        list_to_compare = [
+            "ValidationException: All expression components should be of Expression datatype"
+        ]
+        with self.assertRaises(ValidationException) as context:
+            LogicalExpression([None, None], OrOperator())
+
+        the_exception = context.exception
+
+        list_of_exception_strings.append(the_exception.get_message())
+
+        self.assertListEqual(
+            list_of_exception_strings,
+            list_to_compare
+        )
 
     def test_negative_unary_expression_str(self):
 
@@ -184,6 +232,27 @@ class TestExpressions(unittest.TestCase):
         repr_string = "NotUnaryExpression()"
         self.assertEqual(not_expression.__repr__(), repr_string)
 
-    # TODO: Use exceptions there
     def test_unary_expression_creation_fail(self):
-        pass
+
+        list_of_exception_strings = []
+        list_to_compare = [
+            "ValidationException: UnaryExpression object cannot be created without a proper expression",
+            "ValidationException: UnaryExpression object cannot be created without a proper operator"
+        ]
+        with self.assertRaises(ValidationException) as context:
+            UnaryExpression(None, NotEqualOperator())
+
+        the_exception = context.exception
+
+        list_of_exception_strings.append(the_exception.get_message())
+
+        with self.assertRaises(ValidationException) as context2:
+            UnaryExpression(Expression(), None)
+
+        the_exception = context2.exception
+        list_of_exception_strings.append(the_exception.get_message())
+
+        self.assertListEqual(
+            list_of_exception_strings,
+            list_to_compare
+        )

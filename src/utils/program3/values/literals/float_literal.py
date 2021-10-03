@@ -1,3 +1,4 @@
+from src.exceptions.validation_exception import ValidationException
 from src.utils.program3.values.literals.literal import Literal
 
 
@@ -8,8 +9,7 @@ class FloatLiteral(Literal):
         # TODO: casting rules here
 
         if not isinstance(value, float):
-            # TODO: custom exception here
-            raise Exception("FloatLiteral can only be created using boolean value")
+            raise ValidationException("FloatLiteral can only be created using float value")
         self.value = value
 
     def __str__(self):
