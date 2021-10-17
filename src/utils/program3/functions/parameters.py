@@ -28,4 +28,6 @@ class Parameters(Node):
     def __repr__(self):
         return f"Parameters(is_method={self.is_method}, n_params={len(self.param_names)})"
 
+    # TODO: Keep in mind that a function can have 0 parameters in visitor!!!
+
     # TODO: Modify string representation by external visitor
