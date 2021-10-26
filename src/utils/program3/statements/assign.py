@@ -1,11 +1,11 @@
-from src.utils.program3.node import Node
-from src.utils.program3.statements.complex_var_getter import ComplexVarGetter
+from src.utils.program3.statements.statement import Statement
+from src.utils.program3.values.complex_value_getter import ComplexValueGetter
 from src.utils.program3.expressions.expression import Expression
 
 
-class Assign(Node):
+class Assign(Statement):
 
-    def __init__(self, complex_var_getter: ComplexVarGetter, expression: Expression):
+    def __init__(self, complex_var_getter: ComplexValueGetter, expression: Expression):
 
         self.complex_var_getter = complex_var_getter
         self.expression = expression

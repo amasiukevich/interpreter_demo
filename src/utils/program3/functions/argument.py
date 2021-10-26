@@ -6,8 +6,9 @@ class Argument(Node):
 
     def __init__(self, is_by_ref: bool, expression: Expression):
 
-        if isinstance(expression, Expression):
+        if not isinstance(expression, Expression):
             raise Exception("An expression in argument must be of expression datatype")
+
         self.expression = expression
         self.is_by_ref = is_by_ref
 

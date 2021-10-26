@@ -164,6 +164,19 @@ class TestScanner(unittest.TestCase):
 
         self.base_exception_test_function(string_io, exception_text)
 
+    def test_bool_literal(self):
+
+
+        string_io = io.StringIO("true false")
+        tokens = self.base_test_function(string_io)
+
+        self.assertListEqual(
+            tokens, [
+                Token(TokenType.BOOL_LITERAL, position=Position(1, 1), value=True),
+                Token(TokenType.BOOL_LITERAL, position=Position(1, 6), value=False)
+            ]
+        )
+
 
     def test_construct_keyword(self):
 
@@ -184,8 +197,8 @@ class TestScanner(unittest.TestCase):
                 Token(TokenType.REFLECT, position=Position(1, 51), value="reflect"),
                 Token(TokenType.RECURSIVE, position=Position(1, 59), value="recursive"),
                 Token(TokenType.BY_REF, position=Position(1, 69), value="by_ref"),
-                Token(TokenType.BOOL_LITERAL, position=Position(1, 76), value="true"),
-                Token(TokenType.BOOL_LITERAL, position=Position(1, 81), value="false")
+                Token(TokenType.BOOL_LITERAL, position=Position(1, 76), value=True),
+                Token(TokenType.BOOL_LITERAL, position=Position(1, 81), value=False)
             ]
         )
 
@@ -215,6 +228,7 @@ class TestScanner(unittest.TestCase):
                       value=" And foreach and any purpose I can define this a comment while sitting next door")
             ]
         )
+
 
     def base_test_function(self, string_file_obj: io.StringIO):
 

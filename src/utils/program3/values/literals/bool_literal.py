@@ -16,4 +16,4 @@ class BoolLiteral(Literal):
         return f"{self.value}"
 
     def __repr__(self):
-        return f"BoolLiteral(value={self.value}"
+        return f"BoolLiteral(value={self.value})"

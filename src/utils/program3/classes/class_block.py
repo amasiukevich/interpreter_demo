@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from src.utils.program3.node import Node
 from src.utils.program3.functions.function import Function
@@ -6,11 +6,11 @@ from src.utils.program3.functions.function import Function
 
 class ClassBlock(Node):
 
-    def __init__(self, methods: List[Function, Optional]):
+    def __init__(self, methods: List[Function]=[]):
         self.methods = methods
 
     @staticmethod
-    def validate_class_block(identifier: str, methods: List[Function, Optional]) -> bool:
+    def validate_class_block(identifier: str, methods: List[Function]=[]) -> bool:
 
         is_valid = True
         if len(methods) > 0:

@@ -1,0 +1,5 @@
+define main() {
+    # THIS is a comment
+    # # and this is a comment
+    # and this is also a comment
+}

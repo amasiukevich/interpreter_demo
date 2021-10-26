@@ -11,6 +11,16 @@ class BasicValueGetter(Node):
         self.rest_function_call = rest_function_call
         self.slicing_expr = slicing_expr
 
+    def get_identifier(self):
+        return self.identifier
+
+    def get_rest_func_call(self):
+        return self.rest_function_call
+
+    def get_slicing_expr(self):
+        return self.slicing_expr
+
+
     def __str__(self):
 
         basic_value_getter_string = f"{self.identifier}"

@@ -310,7 +310,18 @@ class Scanner:
         if tmp_keyword_name:
             self.token = Token(token_type=tmp_keyword_name, position=self.token_position, value=self.tmp_keyword_id)
 
-        return bool(tmp_keyword_name)
+            if self.tmp_keyword_id == "true":
+                self.token = Token(token_type=TokenType.BOOL_LITERAL, position=self.token_position, value=True)
+                return True
+
+            elif self.tmp_keyword_id == "false":
+                self.token = Token(token_type=TokenType.BOOL_LITERAL, position=self.token_position, value=False)
+                return True
+
+            else:
+                return True
+
+        return False
 
     def construct_comment(self):
 

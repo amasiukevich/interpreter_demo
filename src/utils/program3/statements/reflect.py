@@ -19,3 +19,6 @@ class Reflect(Statement):
 
     def __repr__(self):
         return f"Reflect(is_recursive={self.is_recursive}, expression={self.expression})"
+
+    def __eq__(self, other):
+        return self.is_recursive == other.is_recursive

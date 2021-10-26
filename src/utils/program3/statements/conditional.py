@@ -14,7 +14,7 @@ class Conditional(Statement):
                 Conditional.validate_matching(expressions, blocks):
             self.expressions = expressions
             self.blocks = blocks
-            self.num_else_ifs = len(self.expressions) - 1 if len(self.expressions) > 2 else 0
+            self.num_else_ifs = len(self.expressions) - 1 if len(self.expressions) >= 2 else 0
 
     @staticmethod
     def validate_expressions(expressions: List[Expression]) -> bool:
@@ -69,8 +69,8 @@ class Conditional(Statement):
 
     def __repr__(self):
 
-        return f"Conditional(has_if={len(self.expressions) >= 1}, " \
-               f"num_else_ifs={self.num_else_ifs}, " \
+        return f"Conditional(num_else_ifs={self.num_else_ifs}, " \
                f"has_else={len(self.expressions) > 1})"
 
+    # TODO: make custom exceptions keeping in mind number of connections and blocks
     # TODO: make fancy looking code including tabs with external visitor

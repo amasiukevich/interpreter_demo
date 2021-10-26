@@ -20,7 +20,7 @@ class ArithmeticExpression(Expression):
     def validate_differs_in_one(expressions, operators):
         if len(expressions) - len(operators) != 1:
             raise ValidationException(
-                f"Number of exception components should be greater than number of operators by exactly 1"
+                f"Number of expression components should be greater than number of operators by exactly 1"
             )
         return True
 

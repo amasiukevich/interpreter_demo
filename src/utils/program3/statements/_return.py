@@ -1,8 +1,8 @@
-from src.utils.program3.node import Node
+from src.utils.program3.statements.statement import Statement
 from src.utils.program3.expressions.expression import Expression
 
 
-class Return(Node):
+class Return(Statement):
 
     def __init__(self, expression: Expression):
         self.expression = expression

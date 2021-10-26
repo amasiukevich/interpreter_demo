@@ -6,7 +6,7 @@ from src.utils.program3.functions.argument import Argument
 
 class Arguments(Node):
 
-    def __init__(self, arguments: List[Argument] = []):
+    def __init__(self, arguments: List[Argument]=[]):
         self.arguments = arguments
 
     def __str__(self):

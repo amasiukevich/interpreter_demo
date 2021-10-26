@@ -15,6 +15,9 @@ class Parameters(Node):
         self.is_method = has_this
         self.param_names = param_names
 
+    def __len__(self):
+        return len(self.param_names) + 1 if self.is_method else len(self.param_names)
+
     def __str__(self):
 
         to_param_string = []

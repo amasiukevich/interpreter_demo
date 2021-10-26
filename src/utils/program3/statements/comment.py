@@ -11,3 +11,6 @@ class Comment(Statement):
 
     def __repr__(self):
         return f"Comment(body=\"{self.body}\")"
+
+    def __eq__(self, other):
+        return self.body == other.body

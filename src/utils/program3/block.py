@@ -14,6 +14,9 @@ class Block(Node):
 
         self.statements = statements
 
+    def __eq__(self, other):
+        return len(self.statements) == len(other.statements)
+
     def __str__(self):
 
         block_string = "{\n"

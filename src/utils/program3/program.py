@@ -18,6 +18,12 @@ class Program(Node):
             self.classes = classes
             self.class_dict = {_class.identifier: _class for _class in classes}
 
+    def get_functions(self):
+        return self.function_dict
+
+    def get_classes(self):
+        return self.class_dict
+
     @staticmethod
     def validate_functions(functions: List[Function]) -> bool:
         return Program.validate_main_presence(functions) and Program.validate_unique_functions(functions)

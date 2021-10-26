@@ -11,6 +11,7 @@ class MultiplyExpression(ArithmeticExpression):
 
     def __init__(self, expressions: List[Expression], operators: List[Operator]):
         super().__init__(expressions, operators)
+
         self.expressions = expressions
         self.operator = operators
 

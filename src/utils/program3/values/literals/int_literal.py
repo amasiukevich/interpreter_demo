@@ -16,4 +16,4 @@ class IntLiteral(Literal):
         return f"{self.value}"
 
     def __repr__(self):
-        return f"IntLiteral(value={self.value}"
+        return f"IntLiteral(value={self.value})"

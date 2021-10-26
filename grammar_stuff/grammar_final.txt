@@ -22,7 +22,7 @@ conditional = "if", or_expression, block,
 
 loop = foreach_loop | while_loop;
 
-assign = complex_var_getter, "=", or_expression, ";";
+assign = complex_value_getter, "=", or_expression, ";";
 
 return = "return", expression, ";" ;
 reflect = "reflect", ["recursive"], or_expression, ";" ;
@@ -41,7 +41,7 @@ rest_value_getter = basic_value_getter, {access_oper, basic_value_getter} ;
 this_value_getter = this_kw, access_oper;
 basic_value_getter = identifier, [rest_function_call], [ "[", add_expression, "]" ];
 no_call_value_getter = identifier, [ '[' add_expression ']' ];
-complex_var_getter = [this_value_getter], [rest_value_getter, {access_oper}], no_call_value_getter;
+complex_value_getter = [this_value_getter], [rest_value_getter, {access_oper}], no_call_value_getter;
 
 rest_function_call = "(", arguments, ")" ;
 
@@ -80,7 +80,7 @@ neg_oper = "-" ;
 not_oper = "!" ;
 
 # Values
-value = literal | list_value | complex_var_getter;
+value = literal | list_value | complex_value_getter;
 
 list_value = "[", [or_expression, { ",", or_expression } ], "]" ;
 
