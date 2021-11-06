@@ -34,3 +34,4 @@ class FileSource(BaseSource):
 
     def get_position(self):
         return self.position
+    

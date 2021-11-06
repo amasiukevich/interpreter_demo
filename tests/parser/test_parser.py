@@ -2,7 +2,9 @@ import io
 import os
 import unittest
 
+from typing import List
 
+from src.data_sources.string_source import StringSource
 from src.data_sources.file_source import FileSource
 from src.scanner.scanner import Scanner
 from src.parser.parser import Parser
@@ -32,94 +34,163 @@ class TestParser(unittest.TestCase):
     # TODO: Test program, functions and classes
 
 
-    # TODO: Refactor testing for expressions
-    def test_conditional(self):
+    # TODO: Make use of these integrational expression
+    # def test_conditional(self):
+    #
+    #     program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/conditional_test.txt")
+    #
+    #     # getting info we want
+    #     expected = Conditional(expressions=[Expression(), Expression()], blocks=[Block(), Block(), Block()])
+    #     got = program.get_functions()['main'].block.statements[0]
+    #
+    #     self.assertEqual(type(expected), type(got))
+    #
+    # def test_foreach_loop(self):
+    #
+    #     program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/foreach_loop_test.txt")
+    #
+    #     expected = ForeachLoop(identifier=None, expression=None, block=None)
+    #     got = program.get_functions()['main'].block.statements[0]
+    #
+    #     self.assertEqual(type(expected), type(got))
+    #
+    # def test_while_loop(self):
+    #
+    #     program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/while_test.txt")
+    #     expected = WhileLoop(expression=None, block=None)
+    #     got = program.get_functions()['main'].block.statements[0]
+    #
+    #     self.assertEqual(type(expected), type(got))
+    #
+    # def test_assign(self):
+    #     program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/return_test.txt")
+    #     expected = Assign(complex_var_getter=None, expression=None)
+    #     got = program.get_functions()['main'].block.statements[0]
+    #
+    #     self.assertEqual(type(expected), type(got))
+    #
+    # def test_comment(self):
+    #
+    #     program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/comment_test.txt")
+    #     expected_comments = [
+    #         Comment(comment_body=" THIS is a comment"),
+    #         Comment(comment_body=" # and this is a comment"),
+    #         Comment(comment_body=" and this is also a comment")
+    #     ]
+    #     got = program.get_functions()['main'].block.statements
+    #     self.assertListEqual(
+    #         expected_comments, got
+    #     )
+    #
+    # def test_reflect(self):
+    #
+    #     program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/parsing_reflect_file.txt")
+    #
+    #     expected = Reflect(is_recursive=True, expression=None)
+    #     got = program.get_functions()['main'].block.statements[1]
+    #
+    #     self.assertEqual(expected, got)
+    #
+    # def test_return(self):
+    #
+    #     program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/return_test.txt")
+    #
+    #     expected = Return(expression=None)
+    #     got = program.get_functions()['calc_total_price'].block.statements[0]
+    #
+    #     self.assertEqual(type(expected), type(got))
+    #
+    # # Complex value getter here
+    # def test_function_call(self):
+    #
+    #     program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/return_test.txt")
+    #
+    #     expected = ComplexValueGetter(
+    #         this_value_getter=False,
+    #         rest_value_getter=None,
+    #         last_getter=None
+    #     )
+    #
+    #     got = program.get_functions()['main'].block.statements[0].expression
+    #
+    #     self.assertEqual(type(expected), type(got))
+    #
+    # def parser_general_test(self, file_path: str):
+    #
+    #     with io.open(os.path.abspath(file_path)) as file_stream:
+    #         file_source = FileSource(file_stream)
+    #         scanner = Scanner(file_source)
+    #         parser = Parser(scanner)
+    #
+    #         program = parser.parse_program()
+    #
+    #     return program
 
-        program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/conditional_test.txt")
+    # TODO: Test program
 
-        # getting info we want
-        expected = Conditional(expressions=[Expression(), Expression()], blocks=[Block(), Block(), Block()])
-        got = program.get_functions()['main'].block.statements[0]
+    # TODO: Testing functions
 
-        self.assertEqual(type(expected), type(got))
+    # TODO: Testing classes
 
-    def test_foreach_loop(self):
-
-        program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/foreach_loop_test.txt")
-
-        expected = ForeachLoop(identifier=None, expression=None, block=None)
-        got = program.get_functions()['main'].block.statements[0]
-
-        self.assertEqual(type(expected), type(got))
-
-    def test_while_loop(self):
-
-        program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/while_test.txt")
-        expected = WhileLoop(expression=None, block=None)
-        got = program.get_functions()['main'].block.statements[0]
-
-        self.assertEqual(type(expected), type(got))
-
-    def test_assign(self):
-        program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/return_test.txt")
-        expected = Assign(complex_var_getter=None, expression=None)
-        got = program.get_functions()['main'].block.statements[0]
-
-        self.assertEqual(type(expected), type(got))
-
-    def test_comment(self):
-
-        program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/comment_test.txt")
-        expected_comments = [
-            Comment(comment_body=" THIS is a comment"),
-            Comment(comment_body=" # and this is a comment"),
-            Comment(comment_body=" and this is also a comment")
-        ]
-        got = program.get_functions()['main'].block.statements
-        self.assertListEqual(
-            expected_comments, got
-        )
-
-    def test_reflect(self):
-
-        program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/parsing_reflect_file.txt")
-
-        expected = Reflect(is_recursive=True, expression=None)
-        got = program.get_functions()['main'].block.statements[1]
-
-        self.assertEqual(expected, got)
+    # TODO: test statements
 
     def test_return(self):
+        pass
 
-        program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/return_test.txt")
+    def test_assign(self):
+        pass
 
-        expected = Return(expression=None)
-        got = program.get_functions()['calc_total_price'].block.statements[0]
+    def test_comment(self):
+        pass
 
-        self.assertEqual(type(expected), type(got))
+    def test_foreach(self):
+        pass
 
-    # Complex value getter here
-    def test_function_call(self):
+    def test_conditional(self):
+        pass
 
-        program = self.parser_general_test(file_path="../../grammar_stuff/parser_testing_files/return_test.txt")
+    def test_reflect(self):
+        pass
 
-        expected = ComplexValueGetter(
-            this_value_getter=False,
-            rest_value_getter=None,
-            last_getter=None
+    def test_rest_function_call(self):
+        pass
+
+    def test_while_loop(self):
+        pass
+
+    def init_parser(self, test_case: str):
+
+        string_source = StringSource(
+            io.StringIO(test_case)
         )
 
-        got = program.get_functions()['main'].block.statements[0].expression
+        scanner = Scanner(string_source)
+        parser = Parser(scanner)
+        return parser
 
-        self.assertEqual(type(expected), type(got))
+    def test_statement(self, test_cases: List[str], testing_obj: str):
 
-    def parser_general_test(self, file_path: str):
+        results = []
+        for case in test_cases:
 
-        with io.open(os.path.abspath(file_path)) as file_stream:
-            file_source = FileSource(file_stream)
-            scanner = Scanner(file_source)
-            parser = Parser(scanner)
+            if testing_obj == "assign":
+                pass
+            elif testing_obj == "conditional":
+                pass
+            elif testing_obj == "comment":
+                pass
+            elif testing_obj == "foreach":
+                pass
+            elif testing_obj == "reflect":
+                pass
+            elif testing_obj == "return":
+                pass
+            elif testing_obj == "rest_funcion_call":
+                pass
+            elif testing_obj == "while":
+                pass
 
-            program = parser.parse_program()
+        return results
+    # TODO: Testing expressions
 
-        return program
+    # TODO: Testing values

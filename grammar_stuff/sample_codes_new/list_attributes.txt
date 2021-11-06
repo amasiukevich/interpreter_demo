@@ -1,0 +1,29 @@
+class Person {
+
+    Person(this, name, age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+main() {
+
+    david = Person("David", 85);
+    andy = Person("Andy", 45);
+    mike = Person("Mike", 15);
+
+    david.son = andy;
+    andy.son = mike;
+
+    foreach attr in david.attributes {
+        print(attr);
+    }
+
+    foreach attr in david.rec_attributes() {
+
+        print(attr);
+        if attr.hass_attr("son") {
+            print(attr.name + "is a father");
+        }
+    }
+}

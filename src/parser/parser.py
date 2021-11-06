@@ -78,6 +78,7 @@ class Parser:
 
     def parse_function(self):
 
+        # TODO: Remove DEFINE
         if self.compare_and_consume(TokenType.DEFINE):
 
             self.check_current_token(
