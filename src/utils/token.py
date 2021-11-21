@@ -1,9 +1,8 @@
-from .position import Position
-from .token_type import TokenType
+from . import TokenType, Position
+
 
 class Token:
 
-    # TODO: add constants
     SPECIAL_CHARS = []
     MAX_IDENTIFIER_LENGTH = 120
     MAX_NUMBER = 2 ** 32

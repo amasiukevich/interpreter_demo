@@ -1,5 +1,6 @@
 from enum import Enum, auto
 
+
 class TokenType(Enum):
 
     # TOKENS
@@ -45,7 +46,6 @@ class TokenType(Enum):
     COMMA = auto()                      # ,
 
     # Basic language instructions
-    DEFINE = auto()                     # define
     CLASS = auto()                      # class
     THIS = auto()                       # this
 
@@ -57,14 +57,9 @@ class TokenType(Enum):
 
     RETURN = auto()                     # return
 
-    REFLECT = auto()                    # reflect
-    RECURSIVE = auto()                  # for 'reflect recursive'
-
-    BY_REF = auto()
-
     BOOL_LITERAL = auto()               # true or false
     STRING_LITERAL = auto()             # "String"
     NUMERIC_LITERAL = auto()            # 123 or -123
 
     UNKNOWN = auto()
-    EOF = auto()
+    EOF = auto()                        # end of file

@@ -1,6 +1,4 @@
-from src.utils.token import Token
-from src.utils.token_type import TokenType
-
+from src.utils import TokenType, Token
 
 class ParsingException(Exception):
 

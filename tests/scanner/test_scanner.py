@@ -1,24 +1,47 @@
-from src.data_sources.string_source import StringSource
-from src.scanner.scanner import Scanner
-from src.utils.token import Token
-from src.utils.token_type import TokenType
-from src.utils.position import Position
-from src.exceptions.scanning_exception import ScanningException
-
+from src.scanner import Scanner
+from src.data_sources import FileSource, StringSource
+from src.exceptions import ScanningException
+from src.utils import Token, TokenType, Position
 
 import io
 import unittest
 
 
-class TestScanner(unittest.TestCase):
+class TestNewScanner(unittest.TestCase):
 
+    def base_test_function(self, string_file_obj: io.StringIO):
+
+        source = StringSource(string_file_obj)
+
+        scanner = Scanner(source)
+        scanner.get_token_and_move()
+        token = scanner.get_token_and_move()
+        tokens = []
+
+        while token.token_type != TokenType.EOF:
+            tokens.append(token)
+            token = scanner.get_token_and_move()
+
+        return tokens
+
+    def base_exception_test_function(self, string_file_obj: io.StringIO, exception_text: str):
+
+        source = StringSource(string_file_obj)
+        scanner = Scanner(source)
+        with self.assertRaises(ScanningException) as context:
+            scanner.next_token()
+
+        the_exception = context.exception
+        self.assertEqual(
+            the_exception.get_message(),
+            exception_text
+        )
 
     def test_construct_eof(self):
 
         source = StringSource(
             io.StringIO("")
         )
-
         scanner = Scanner(source)
         scanner.get_token_and_move()
         token = scanner.get_token()
@@ -26,7 +49,6 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(
             token, Token(TokenType.EOF, Position(1, 0), value=None)
         )
-
 
     def test_construct_single_char_tokens(self):
 
@@ -48,12 +70,11 @@ class TestScanner(unittest.TestCase):
                 Token(TokenType.PLUS, Position(1, 11), value="+"),
                 Token(TokenType.SEMICOLON, Position(1, 12), value=";"),
                 Token(TokenType.COMMA, Position(1, 13), value=","),
-                Token(TokenType.ACCESS, Position(1, 14), value="."),
+                Token(TokenType.ACCESS, Position(1, 14), value=".")
             ]
         )
 
     def test_construct_double_char_tokens(self):
-
         string_io = io.StringIO("&& || < >= > <= != == = !")
         tokens = self.base_test_function(string_io)
 
@@ -86,7 +107,6 @@ class TestScanner(unittest.TestCase):
             ]
         )
 
-
     def test_fractional_number(self):
 
         string_io = io.StringIO("7.405, 123.0001")
@@ -101,22 +121,17 @@ class TestScanner(unittest.TestCase):
         )
 
     def test_leading_zero(self):
-
         string_io = io.StringIO("000123")
-        exception_text =  f"ScanningException at position: {Position(1, 1)}\n" \
-                          f"An integer part of number cannot start with 0"
+        exception_text = f"ScanningException at position: {Position(1, 1)}\n" \
+                         f"An integer part of number cannot start with 0"
 
         self.base_exception_test_function(string_io, exception_text)
 
-
     def test_max_number(self):
-
         string_io = io.StringIO("1200000000000000000000000000000000000000000000000000000;")
         exception_text = f"ScanningException at position: {Position(1, 1)}\n" \
                          f"Exceeded maximum number limit"
-
         self.base_exception_test_function(string_io, exception_text)
-
 
     def test_construct_identifier(self):
 
@@ -133,7 +148,6 @@ class TestScanner(unittest.TestCase):
         )
 
     def test_id_length(self):
-
         string_io = io.StringIO("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                                 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                                 "aaaaaaaa")
@@ -142,7 +156,6 @@ class TestScanner(unittest.TestCase):
                          f"Length of the identifier exceeded"
 
         self.base_exception_test_function(string_io, exception_text)
-
 
     def test_construct_string_literal(self):
 
@@ -155,7 +168,6 @@ class TestScanner(unittest.TestCase):
             ]
         )
 
-
     def test_not_closed_string(self):
 
         string_io = io.StringIO("\"Ala ma kota")
@@ -164,52 +176,31 @@ class TestScanner(unittest.TestCase):
 
         self.base_exception_test_function(string_io, exception_text)
 
-    def test_bool_literal(self):
-
-
-        string_io = io.StringIO("true false")
-        tokens = self.base_test_function(string_io)
-
-        self.assertListEqual(
-            tokens, [
-                Token(TokenType.BOOL_LITERAL, position=Position(1, 1), value=True),
-                Token(TokenType.BOOL_LITERAL, position=Position(1, 6), value=False)
-            ]
-        )
-
-
     def test_construct_keyword(self):
-
-        string_io = io.StringIO("define class this if else foreach while in return reflect recursive by_ref true false")
+        string_io = io.StringIO("class this if else foreach while in return true false")
         tokens = self.base_test_function(string_io)
-
         self.assertListEqual(
             tokens, [
-                Token(TokenType.DEFINE, position=Position(1, 1), value="define"),
-                Token(TokenType.CLASS, position=Position(1, 8), value="class"),
-                Token(TokenType.THIS, position=Position(1, 14), value="this"),
-                Token(TokenType.IF, position=Position(1, 19), value="if"),
-                Token(TokenType.ELSE, position=Position(1, 22), value="else"),
-                Token(TokenType.FOREACH, position=Position(1, 27), value="foreach"),
-                Token(TokenType.WHILE, position=Position(1, 35), value="while"),
-                Token(TokenType.IN, position=Position(1, 41), value="in"),
-                Token(TokenType.RETURN, position=Position(1, 44), value="return"),
-                Token(TokenType.REFLECT, position=Position(1, 51), value="reflect"),
-                Token(TokenType.RECURSIVE, position=Position(1, 59), value="recursive"),
-                Token(TokenType.BY_REF, position=Position(1, 69), value="by_ref"),
-                Token(TokenType.BOOL_LITERAL, position=Position(1, 76), value=True),
-                Token(TokenType.BOOL_LITERAL, position=Position(1, 81), value=False)
+                Token(TokenType.CLASS, position=Position(1, 1), value="class"),
+                Token(TokenType.THIS, position=Position(1, 7), value="this"),
+                Token(TokenType.IF, position=Position(1, 12), value="if"),
+                Token(TokenType.ELSE, position=Position(1, 15), value="else"),
+                Token(TokenType.FOREACH, position=Position(1, 20), value="foreach"),
+                Token(TokenType.WHILE, position=Position(1, 28), value="while"),
+                Token(TokenType.IN, position=Position(1, 34), value="in"),
+                Token(TokenType.RETURN, position=Position(1, 37), value="return"),
+                Token(TokenType.BOOL_LITERAL, position=Position(1, 44), value="true"),
+                Token(TokenType.BOOL_LITERAL, position=Position(1, 49), value="false")
             ]
         )
 
     def test_invalid_identifier(self):
 
         string_io = io.StringIO("$'")
-
         exception_text = f"ScanningException at position: {Position(1, 1)}\n" \
                          f"Invalid identifier"
-        pass
 
+        self.base_exception_test_function(string_io, exception_text)
 
     def test_construct_comment(self):
 
@@ -229,37 +220,46 @@ class TestScanner(unittest.TestCase):
             ]
         )
 
+    def test_arithmetic(self):
 
-    def base_test_function(self, string_file_obj: io.StringIO):
+        with open("../../grammar_stuff/test_codes/test_arithmetic.txt") as test_file:
+            file_source = FileSource(test_file)
+            scanner = Scanner(file_source)
 
-        source = StringSource(string_file_obj)
-
-        scanner = Scanner(source)
-        scanner.get_token_and_move()
-        token = scanner.get_token_and_move()
-
-        tokens = []
-        while token.token_type != TokenType.EOF:
-            tokens.append(token)
+            scanner.get_token_and_move()
             token = scanner.get_token_and_move()
+            tokens = []
 
-        return tokens
+            while token.token_type != TokenType.EOF:
+                tokens.append(token)
+                token = scanner.get_token_and_move()
 
-    def base_exception_test_function(self, string_file_obj: io.StringIO, exception_text: str):
-
-        source = StringSource(string_file_obj)
-
-        scanner = Scanner(source)
-
-        with self.assertRaises(ScanningException) as context:
-            scanner.next_token()
-
-        the_exception = context.exception
-
-        self.assertEqual(
-            the_exception.get_message(),
-            exception_text
+        self.assertListEqual(
+            tokens, [
+                Token(token_type=TokenType.IDENTIFIER, position=Position(1, 1), value="main"),
+                Token(token_type=TokenType.OPEN_PARENTHESIS, position=Position(1, 5), value="("),
+                Token(token_type=TokenType.CLOSING_PARENTHESIS, position=Position(1, 6), value=")"),
+                Token(token_type=TokenType.OPEN_CURLY_BRACKET, position=Position(1, 8), value="{"),
+                Token(token_type=TokenType.IDENTIFIER, position=Position(2, 5), value="discount_perc"),
+                Token(token_type=TokenType.ASSIGN, position=Position(2, 19), value="="),
+                Token(token_type=TokenType.NUMERIC_LITERAL, position=Position(2, 21), value=10),
+                Token(token_type=TokenType.SEMICOLON, position=Position(2, 23), value=";"),
+                Token(token_type=TokenType.IDENTIFIER, position=Position(3, 5), value="init_price"),
+                Token(token_type=TokenType.ASSIGN, position=Position(3, 16), value="="),
+                Token(token_type=TokenType.NUMERIC_LITERAL, position=Position(3, 18), value=100),
+                Token(token_type=TokenType.SEMICOLON, position=Position(3, 21), value=";"),
+                Token(token_type=TokenType.IDENTIFIER, position=Position(4, 5), value="price_after_discount"),
+                Token(token_type=TokenType.ASSIGN, position=Position(4, 26), value="="),
+                Token(token_type=TokenType.IDENTIFIER, position=Position(4, 28), value="init_price"),
+                Token(token_type=TokenType.MULTIPLY, position=Position(4, 39), value="*"),
+                Token(token_type=TokenType.OPEN_PARENTHESIS, position=Position(4, 41), value="("),
+                Token(token_type=TokenType.NUMERIC_LITERAL, position=Position(4, 42), value=100),
+                Token(token_type=TokenType.MINUS, position=Position(4, 46), value="-"),
+                Token(token_type=TokenType.IDENTIFIER, position=Position(4, 48), value="discount_perc"),
+                Token(token_type=TokenType.CLOSING_PARENTHESIS, position=Position(4, 61), value=")"),
+                Token(token_type=TokenType.DIVIDE, position=Position(4, 63), value="/"),
+                Token(token_type=TokenType.NUMERIC_LITERAL, position=Position(4, 65), value=100),
+                Token(token_type=TokenType.SEMICOLON, position=Position(4, 68), value=";"),
+                Token(token_type=TokenType.CLOSING_CURLY_BRACKET, position=Position(5, 1), value="}"),
+            ]
         )
-
-
-

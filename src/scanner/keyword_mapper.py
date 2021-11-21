@@ -1,10 +1,9 @@
-from src.utils.token_type import TokenType
+from src.utils import TokenType
 
 
 class KeywordMapper:
 
     KEYWORD_MAP = {
-        "define" : TokenType.DEFINE,
         "class" : TokenType.CLASS,
         "this" : TokenType.THIS,
         "if" : TokenType.IF,
@@ -13,9 +12,6 @@ class KeywordMapper:
         "while": TokenType.WHILE,
         "in" : TokenType.IN,
         "return" : TokenType.RETURN,
-        "reflect" : TokenType.REFLECT,
-        "recursive" : TokenType.RECURSIVE,
-        "by_ref" : TokenType.BY_REF,
         "true" : TokenType.BOOL_LITERAL,
         "false" : TokenType.BOOL_LITERAL
     }
