@@ -1,13 +1,13 @@
-from src.scanner import Scanner
-from src.data_sources import FileSource, StringSource
-from src.exceptions import ScanningException
-from src.utils import Token, TokenType, Position
-
 import io
 import unittest
 
+from src.data_sources import FileSource, StringSource
+from src.exceptions import ScanningException
+from src.scanner import Scanner
+from src.utils import Token, TokenType, Position
 
-class TestNewScanner(unittest.TestCase):
+
+class TestScanner(unittest.TestCase):
 
     def base_test_function(self, string_file_obj: io.StringIO):
 

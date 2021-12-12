@@ -1,6 +1,11 @@
-from src.utils.program3.values.value import Value
 from abc import ABCMeta
+
+from src.utils.program3.values.value import Value
 
 
 class Literal(Value, metaclass=ABCMeta):
-    pass
+
+    BOOLEAN_FILTER = {
+        "true": True,
+        "false": False
+    }

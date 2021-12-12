@@ -1,7 +1,7 @@
-from src.exceptions.validation_exception import ValidationException
-from src.utils.program3.node import Node
-
 from typing import List
+
+from src.exceptions import ValidationException
+from src.utils.program3.node import Node
 
 
 class Operator(Node):

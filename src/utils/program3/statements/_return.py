@@ -1,5 +1,5 @@
-from src.utils.program3.statements.statement import Statement
 from src.utils.program3.expressions.expression import Expression
+from src.utils.program3.statements.statement import Statement
 
 
 class Return(Statement):

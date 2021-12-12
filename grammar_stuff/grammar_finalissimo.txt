@@ -12,7 +12,7 @@ statement ::=   conditional |
                 loop |
                 return |
                 assign |
-                complex_getter |
+                function_call |
                 comment ;
 
 conditional ::= "if", or_expression, block,
@@ -24,7 +24,7 @@ return ::= "return", or_expression, ";" ;
 comment ::= "#", comment_body;
 
 assign ::= complex_getter, "=", or_expression;
-
+function_call ::= complex_getter, ";" ;
 
 foreach_loop ::= "foreach", identifier, "in", or_expression, block;
 while_loop ::= "while", or_expression, block;

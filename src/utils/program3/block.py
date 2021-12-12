@@ -1,7 +1,8 @@
+from typing import List
+
+from src.exceptions import ValidationException
 from src.utils.program3.node import Node
 from src.utils.program3.statements.statement import Statement
-
-from typing import List
 
 
 class Block(Node):
@@ -9,8 +10,7 @@ class Block(Node):
     def __init__(self, statements: List[Statement] = []):
 
         if len(statements) > 0 and not all([isinstance(statement, Statement) for statement in statements]):
-            # TODO: Custom exception here
-            raise Exception("All component statements in block should be of Statement datatype")
+            raise ValidationException("All component statements in block should be of Statement datatype")
 
         self.statements = statements
 
@@ -28,3 +28,5 @@ class Block(Node):
 
     def __repr__(self):
         return f"Block(n_statements={len(self.statements)})"
+
+    # TODO: Beautify __str__ after visiting

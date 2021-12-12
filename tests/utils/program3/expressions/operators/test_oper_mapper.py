@@ -1,5 +1,6 @@
-from src.utils.program3.expressions.operators.oper_mapper import OperatorMapper
+import unittest
 
+from src.utils.position import Position
 from src.utils.program3.expressions.operators.and_oper import AndOperator
 from src.utils.program3.expressions.operators.data_access_oper import DataAccessOperator
 from src.utils.program3.expressions.operators.divide_oper import DivideOperator
@@ -14,16 +15,12 @@ from src.utils.program3.expressions.operators.multiply_oper import MultiplyOpera
 from src.utils.program3.expressions.operators.negative_oper import NegativeOperator
 from src.utils.program3.expressions.operators.not_equal_oper import NotEqualOperator
 from src.utils.program3.expressions.operators.not_oper import NotOperator
+from src.utils.program3.expressions.operators.oper_mapper import OperatorMapper
 from src.utils.program3.expressions.operators.or_operator import OrOperator
 from src.utils.program3.expressions.operators.plus_oper import PlusOperator
-
 from src.utils.token import Token
 from src.utils.token_type import TokenType
-from src.utils.position import Position
 
-from typing import List
-
-import unittest
 
 class TestOperMapper(unittest.TestCase):
 

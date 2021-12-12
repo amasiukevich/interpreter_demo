@@ -1,4 +1,4 @@
-from src.exceptions.validation_exception import ValidationException
+from src.exceptions import ValidationException
 from src.utils.program3.values.literals.literal import Literal
 
 

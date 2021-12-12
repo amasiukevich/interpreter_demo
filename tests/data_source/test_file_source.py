@@ -1,9 +1,9 @@
+import io
+import os
+import unittest
+
 from src.data_sources.file_source import FileSource
 from src.utils.position import Position
-
-import os
-import io
-import unittest
 
 
 class TestFileSource(unittest.TestCase):

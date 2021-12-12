@@ -1,6 +1,8 @@
+from typing import List
+
 from src.data_sources import BaseSource
-from src.utils import Token, TokenType, Position
 from src.exceptions import ScanningException
+from src.utils import Token, TokenType, Position
 from . import *
 
 
@@ -215,14 +217,16 @@ class Scanner:
         :return: the float value of fractional part
         """
         frac_value = 0
-        exponent = self.ignore_zeros() + 1
+        exponent = self.ignore_zeros()
+
 
         while self.is_numerically_valid(self.source.get_char()):
-            frac_value += (ord(self.source.get_char()) - ord("0")) * 10 ** (-exponent)
+
+            frac_value = frac_value * 10 + (ord(self.source.get_char()) - ord('0'))
             exponent += 1
             self.source.read_char()
 
-        return frac_value
+        return frac_value * 10 ** (-exponent)
 
     def ignore_zeros(self) -> int:
         """
@@ -246,12 +250,16 @@ class Scanner:
 
         str_literal_value = ""
         self.source.read_char()
+
         while self.source.get_char() != "\"":
 
-            if self.source.get_char() in ["\n", -1]:
+            # TODO: Escapowanie tabulacji, znaków nowej linii...
+            if self.source.get_char() in ["\v", "\n", "\r", "\036", "\025", -1]:
+
                 raise ScanningException(position=self.token_position,
                                         message="Missing closing \"")
 
+            # TODO: String builder here
             str_literal_value += self.source.get_char()
             self.source.read_char()
 
@@ -266,49 +274,51 @@ class Scanner:
         Constructs keyword or identifier
         :return: if the identifier is recognized
         """
-        self.tmp_keyword_id = ""
-        self.tmp_kw_len = 0
 
-        if self.is_begin_valid():
+        if keyword_id_symbols := self.is_begin_valid([]):
 
-            while self.is_valid_part() and self.tmp_kw_len < Token.MAX_IDENTIFIER_LENGTH:
-                self.tmp_keyword_id += self.source.get_char()
-                self.tmp_kw_len += 1
+            while self.is_valid_part() and len(keyword_id_symbols) < Token.MAX_IDENTIFIER_LENGTH:
+
+                keyword_id_symbols.append(self.source.get_char())
                 self.source.read_char()
 
             if self.is_valid_part():
                 raise ScanningException(position=self.token_position,
                                         message="Length of the identifier exceeded")
 
-            if self.construct_keyword():
+            if self.construct_keyword(keyword_id_symbols):
                 return True
 
-            self.token = Token(TokenType.IDENTIFIER, position=self.token_position, value=self.tmp_keyword_id)
+            identifier_str = ''.join(keyword_id_symbols)
+            self.token = Token(TokenType.IDENTIFIER, position=self.token_position, value=identifier_str)
             return True
         else:
             return False
 
-    def is_begin_valid(self) -> bool:
+    def is_begin_valid(self, keyword_id_symbols: List[str]) -> list:
         """
+        :param keyword_id_symbols - the part of the keyword that is already constructed (as chars in list)
         Checks if the beginning of the identifier is valid
         :return: whether recognized
         """
+
         if self.source.get_char().isalpha():
-            self.tmp_keyword_id += self.source.get_char()
-            self.tmp_kw_len += 1
+
+            keyword_id_symbols.append(self.source.get_char())
             self.source.read_char()
-            return True
+            return keyword_id_symbols
+
         # for identifiers only
         elif self.source.get_char() in ["$", "_"]:
 
-            self.tmp_keyword_id += self.source.get_char()
+            keyword_id_symbols.append(self.source.get_char())
             self.source.read_char()
 
             if self.is_valid_part():
-                self.tmp_keyword_id += self.source.get_char()
-                self.tmp_kw_len += 2
+
+                keyword_id_symbols.append(self.source.get_char())
                 self.source.read_char()
-                return True
+                return keyword_id_symbols
             else:
                 raise ScanningException(position=self.token_position,
                                         message="Invalid identifier")
@@ -321,14 +331,17 @@ class Scanner:
         return isinstance(self.source.get_char(), str) and \
                (self.source.get_char().isalnum() or self.source.get_char() == "_")
 
-    def construct_keyword(self) -> bool:
+    def construct_keyword(self, keyword_id_symbols: List[str]) -> bool:
         """
         Constructs the keyword
+        :param:  already constructed temporary keyword
         :return: whether the keyword is constructed
         """
-        tmp_keyword_name = self.kw_mapper.KEYWORD_MAP.get(self.tmp_keyword_id)
+        keyword_str = ''.join(keyword_id_symbols)
+        tmp_keyword_name = self.kw_mapper.KEYWORD_MAP.get(keyword_str)
+
         if tmp_keyword_name:
-            self.token = Token(token_type=tmp_keyword_name, position=self.token_position, value=self.tmp_keyword_id)
+            self.token = Token(token_type=tmp_keyword_name, position=self.token_position, value=keyword_str)
 
         return bool(tmp_keyword_name)
 
@@ -339,12 +352,14 @@ class Scanner:
         """
         is_recognized = self.source.get_char() == "#"
         if is_recognized:
-
-            comment_body = ""
             self.source.read_char()
+            comment_symbols = []
+
             while self.source.get_char() not in ["\n", -1]:
-                comment_body += self.source.get_char()
+                comment_symbols.append(self.source.get_char())
                 self.source.read_char()
+
+            comment_body = ''.join(comment_symbols)
             self.token = Token(TokenType.COMMENT, position=self.token_position, value=comment_body)
 
         return is_recognized

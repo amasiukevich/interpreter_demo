@@ -1,4 +1,5 @@
-from src.utils import TokenType, Token
+from src.utils import Token, TokenType
+
 
 class ParsingException(Exception):
 

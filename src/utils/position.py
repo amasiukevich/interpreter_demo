@@ -1,16 +1,14 @@
-from src.exceptions.position_exception import PositionException
-
 class Position:
 
     def __init__(self, line=1, column=0):
 
         if line <= 0:
-            raise PositionException("Line cannot be less than 1")
+            raise Exception("Line cannot be less than 1")
 
         if column < 0:
-            raise PositionException("Column cannot be less than 0")
+            raise Exception("Column cannot be less than 0")
 
-
+        # TODO: The pointer to the file position
         self.line = line
         self.column = column
 

@@ -1,30 +1,29 @@
-from src.exceptions.validation_exception import ValidationException
-from src.utils.program3.expressions.expression import Expression
-from src.utils.program3.expressions.math.unary_expression import UnaryExpression
-from src.utils.program3.expressions.math.arithmetic_expression import ArithmeticExpression
-from src.utils.program3.expressions.math.logical_expression import LogicalExpression
-from src.utils.program3.expressions.math.add_expression import AddExpression
-from src.utils.program3.expressions.math.multiply_expression import MultiplyExpression
-from src.utils.program3.expressions.math.and_expression import AndExpression
-from src.utils.program3.expressions.math.or_expression import OrExpression
-from src.utils.program3.expressions.math.equality_expression import EqualityExpression
-from src.utils.program3.expressions.math.relation_expression import RelationExpression
+import unittest
+
 from src.utils.program3.expressions.math.negative_unary_expression import NegativeUnaryExpression
 from src.utils.program3.expressions.math.not_unary_expression import NotUnaryExpression
-from src.utils.program3.expressions.operators.less_oper import LessOperator
 
-from src.utils.program3.expressions.operators.minus_oper import MinusOperator
-from src.utils.program3.expressions.operators.not_equal_oper import NotEqualOperator
-from src.utils.program3.expressions.operators.or_operator import OrOperator
-from src.utils.program3.values.literals.bool_literal import BoolLiteral
+from src.exceptions.validation_exception import ValidationException
+from src.utils.program3.expressions.expression import Expression
+from src.utils.program3.expressions.math.add_expression import AddExpression
+from src.utils.program3.expressions.math.and_expression import AndExpression
+from src.utils.program3.expressions.math.equality_expression import EqualityExpression
+from src.utils.program3.expressions.math.logical_expression import LogicalExpression
+from src.utils.program3.expressions.math.multiply_expression import MultiplyExpression
+from src.utils.program3.expressions.math.or_expression import OrExpression
+from src.utils.program3.expressions.math.relation_expression import RelationExpression
+from src.utils.program3.expressions.math.unary_expression import UnaryExpression
 from src.utils.program3.expressions.operators.divide_oper import DivideOperator
-from src.utils.program3.values.literals.int_literal import IntLiteral
 from src.utils.program3.expressions.operators.equal_oper import EqualityOperator
 from src.utils.program3.expressions.operators.greater_equal_oper import GreaterEqualOperator
-from src.utils.program3.expressions.operators.plus_oper import PlusOperator
+from src.utils.program3.expressions.operators.less_oper import LessOperator
+from src.utils.program3.expressions.operators.minus_oper import MinusOperator
 from src.utils.program3.expressions.operators.modulo_oper import ModuloOperator
-
-import unittest
+from src.utils.program3.expressions.operators.not_equal_oper import NotEqualOperator
+from src.utils.program3.expressions.operators.or_operator import OrOperator
+from src.utils.program3.expressions.operators.plus_oper import PlusOperator
+from src.utils.program3.values.literals.bool_literal import BoolLiteral
+from src.utils.program3.values.literals.int_literal import IntLiteral
 
 
 class TestExpressions(unittest.TestCase):

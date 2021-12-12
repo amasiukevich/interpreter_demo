@@ -1,8 +1,8 @@
+from typing import List
+
+from src.exceptions import ValidationException
 from src.utils.program3.expressions.expression import Expression
 from src.utils.program3.expressions.operators.operator import Operator
-from src.exceptions.validation_exception import ValidationException
-
-from typing import List
 
 
 class ArithmeticExpression(Expression):

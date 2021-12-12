@@ -1,4 +1,4 @@
-from src.utils.position import Position
+from src.utils import Position
 
 
 class ScanningException(Exception):

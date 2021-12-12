@@ -5,7 +5,7 @@ class Person {
         this.age = age;
     }
 
-    get_name() {
+    get_name(this) {
         return this.name;
     }
 }
@@ -16,7 +16,7 @@ class Pet {
         this.name = name;
     }
 
-    get_name() {
+    get_name(this) {
         return this.name;
     }
 }

@@ -1,4 +1,4 @@
-from . import TokenType, Position
+from src.utils import TokenType, Position
 
 
 class Token:

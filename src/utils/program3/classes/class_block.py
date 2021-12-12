@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import List
 
 from src.utils.program3.node import Node
 from src.utils.program3.functions.function import Function
@@ -28,6 +28,9 @@ class ClassBlock(Node):
         return class_block_string
 
     def __repr__(self):
-        return f"ClassBlock({len(self.methods)})"
+        return f"ClassBlock(num_methods={len(self.methods)})"
+
+    def __len__(self):
+        return len(self.methods)
 
     # TODO: regulate tabs in fancy string representation by external visitor

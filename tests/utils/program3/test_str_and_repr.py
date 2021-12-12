@@ -1,8 +1,6 @@
 import unittest
 
 from src.utils.program3.functions.parameters import Parameters
-from src.utils.program3.functions.arguments import Arguments
-from src.utils.program3.functions.argument import Argument
 
 
 class TestStrAndRepr(unittest.TestCase):

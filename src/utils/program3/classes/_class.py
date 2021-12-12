@@ -1,3 +1,4 @@
+from src.exceptions import ValidationException
 from src.utils.program3.node import Node
 from src.utils.program3.classes.class_block import ClassBlock
 
@@ -10,8 +11,7 @@ class Class(Node):
             self.identifier = identifier
             self.class_block = class_block
         else:
-            # TODO: Custom exception here
-            raise Exception("Class block should contain the costructor of the same name as class")
+            raise ValidationException("Class block should contain the costructor of the same name as class")
 
     def __str__(self):
         return f"class " \

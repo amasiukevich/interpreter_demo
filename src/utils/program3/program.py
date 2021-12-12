@@ -1,13 +1,16 @@
 from typing import List, Union
-from src.utils.helpers import check_unique_names
 
+from src.utils import check_unique_names
 from src.utils.program3.node import Node
-from src.utils.program3.functions.function import Function
 from src.utils.program3.classes._class import Class
+from src.utils.program3.functions.function import Function
 
+
+# TODO: Make proper validation
 class Program(Node):
 
     # TODO: At least one function
+    # TODO: Add starting function field and adjust validation
     def __init__(self, functions: List[Function], classes: List[Class] = []):
 
         if Program.validate_functions(functions):

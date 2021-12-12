@@ -1,12 +1,12 @@
 from typing import List
 
 from src.utils.program3.node import Node
-from src.utils.program3.functions.argument import Argument
+from src.utils.program3.expressions.expression import Expression
 
 
 class Arguments(Node):
 
-    def __init__(self, arguments: List[Argument]=[]):
+    def __init__(self, arguments: List[Expression]=[]):
         self.arguments = arguments
 
     def __str__(self):

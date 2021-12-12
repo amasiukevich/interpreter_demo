@@ -1,9 +1,9 @@
+import io
+import unittest
+
 from src.data_sources.string_source import StringSource
 from src.utils.position import Position
 
-import io
-
-import unittest
 
 class TestStringSource(unittest.TestCase):
 

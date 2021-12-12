@@ -1,18 +1,18 @@
-from src.utils.program3.expressions.math.arithmetic_expression import ArithmeticExpression
-from src.utils.program3.expressions.expression import Expression
-from src.utils.program3.expressions.operators.operator import Operator
 from typing import List
 
+from src.utils.program3.expressions.expression import Expression
+from src.utils.program3.expressions.math.comparing_expression import ComparingExpression
+from src.utils.program3.expressions.operators.operator import Operator
 
-class EqualityExpression(ArithmeticExpression):
+
+class EqualityExpression(ComparingExpression):
 
     # Equal and Not equal
 
-    def __init__(self, expressions: List[Expression], operators: List[Operator]):
-        super().__init__(expressions, operators)
+    def __init__(self, expressions: List[Expression], operator: Operator):
+        super().__init__(expressions, operator)
         self.expressions = expressions
-        self.operators = operators
+        self.operator = operator
 
     def __repr__(self):
-        operators_string = "[" + ", ".join([str(oper) for oper in self.operators]) + "]"
-        return f"EqualityExpression(operators={operators_string}, {len(self.expressions)})"
+        return f"EqualityExpression(operators={self.operator}, {len(self.expressions)})"

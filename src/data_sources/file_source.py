@@ -1,7 +1,7 @@
-from src.utils import Position
+from typing import TextIO
 
 from . import *
-from typing import TextIO
+from src.utils import Position
 
 
 class FileSource(BaseSource):
@@ -27,9 +27,33 @@ class FileSource(BaseSource):
             self.character = -1
 
     def advance_position(self, char):
-        if char == "\n":
+
+        if char in ["\036", "\025"]:
+
             self.position.advance_line()
             self.curr_char_line = []
+
+        elif char == "\n":
+
+            copied_ptr = self.reader.tell()
+            self.reader.seek(copied_ptr)
+
+            new_char = self.reader.read(1)
+            self.position.advance_line()
+            self.curr_char_line = []
+            if new_char != "\r":
+                self.reader.seek(copied_ptr)
+
+        elif char == "\r":
+
+            copied_ptr = self.reader.tell()
+            self.reader.seek(copied_ptr)
+            new_char = self.reader.read(1)
+            self.position.advance_line()
+            self.curr_char_line = []
+
+            if new_char == "\n":
+                self.reader.seek(copied_ptr)
         else:
             self.position.advance_column()
             self.curr_char_line.append(char)

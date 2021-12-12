@@ -1,5 +1,5 @@
-from src.utils.program3.expressions.math.arithmetic_expression import ArithmeticExpression
 from src.utils.program3.expressions.expression import Expression
+from src.utils.program3.expressions.math.arithmetic_expression import ArithmeticExpression
 from src.utils.program3.expressions.operators.operator import Operator
 
 from typing import List

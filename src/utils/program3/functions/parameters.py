@@ -1,7 +1,8 @@
 from typing import List
 
+from src.exceptions import ValidationException
+from src.utils import check_unique_names
 from src.utils.program3.node import Node
-from src.utils.helpers import check_unique_names
 
 
 class Parameters(Node):
@@ -9,8 +10,7 @@ class Parameters(Node):
     def __init__(self, has_this: bool = False, param_names: List[str] = []):
 
         if not check_unique_names(param_names):
-            # TODO: Custom exception here
-            raise Exception("Param names should be unique")
+            raise ValidationException("Param names should be unique")
 
         self.is_method = has_this
         self.param_names = param_names

@@ -1,8 +1,7 @@
-from src.utils.program3.expressions.math.logical_expression import LogicalExpression
-from src.utils.program3.expressions.expression import Expression
-
 from typing import List
 
+from src.utils.program3.expressions.expression import Expression
+from src.utils.program3.expressions.math.logical_expression import LogicalExpression
 from src.utils.program3.expressions.operators.or_operator import OrOperator
 
 

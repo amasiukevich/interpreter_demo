@@ -1,8 +1,9 @@
-from src.utils.program3.statements.statement import Statement
-from src.utils.program3.expressions.expression import Expression
-from src.utils.program3.block import Block
-
 from typing import List
+
+from src.exceptions import ValidationException
+from src.utils.program3.block import Block
+from src.utils.program3.expressions.expression import Expression
+from src.utils.program3.statements.statement import Statement
 
 
 class Conditional(Statement):
@@ -20,12 +21,10 @@ class Conditional(Statement):
     def validate_expressions(expressions: List[Expression]) -> bool:
         is_valid = True
         if len(expressions) <= 0:
-            # TODO: Custom exception here
-            raise Exception("Cannot parse Conditional without component expressions")
+            raise ValidationException("Cannot parse Conditional without component expressions")
 
         if not all([isinstance(expression, Expression) for expression in expressions]):
-            # TODO: Custom exception here
-            raise Exception("All of the expression components must be of Expression datatype")
+            raise ValidationException("All of the expression components must be of Expression datatype")
 
         return is_valid
 
@@ -34,12 +33,10 @@ class Conditional(Statement):
 
         is_valid = True
         if len(blocks) <= 0:
-            # TODO: custom exception here
-            raise Exception("Cannot parse Conditional without component blocks")
+            raise ValidationException("Cannot parse Conditional without component blocks")
 
         if not all([isinstance(block, Block) for block in blocks]):
-            # TODO: custom exception here
-            raise Exception("All of the block components must be of Block datatype")
+            raise ValidationException("All of the block components must be of Block datatype")
 
         return is_valid
 
@@ -48,11 +45,10 @@ class Conditional(Statement):
         is_valid = True
         # single if case
         if len(expressions) == len(blocks) != 1:
-            # TODO: custom exception here
-            raise Exception("Number of expressions equals number of blocks only in single if conditional")
-        elif len(blocks) - len(expressions) != 1:
-            # TODO: custom exception here
-            raise Exception("Inconsistent number of blocks and expressions in conditional")
+            raise ValidationException("Number of expressions equals number of blocks only in single if conditional")
+
+        if len(blocks) - len(expressions) != 1 and len(blocks) != 1:
+            raise ValidationException("Inconsistent number of blocks and expressions in conditional")
         return is_valid
 
     def __str__(self):
@@ -68,9 +64,7 @@ class Conditional(Statement):
         return base_conditional_string
 
     def __repr__(self):
-
         return f"Conditional(num_else_ifs={self.num_else_ifs}, " \
                f"has_else={len(self.expressions) > 1})"
 
-    # TODO: make custom exceptions keeping in mind number of connections and blocks
     # TODO: make fancy looking code including tabs with external visitor
