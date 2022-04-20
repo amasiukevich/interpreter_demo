@@ -1,6 +1,7 @@
 from src.utils.program3.block import Block
 from src.utils.program3.expressions.expression import Expression
 from src.utils.program3.statements.loop import Loop
+from src.utils.visitor_old import Visitor
 
 
 class WhileLoop(Loop):
@@ -14,3 +15,6 @@ class WhileLoop(Loop):
 
     def __repr__(self):
         return f"WhileLoop(expression={self.expression}, block={self.block})"
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_while_loop(self)

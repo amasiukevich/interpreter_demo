@@ -1,5 +1,6 @@
 from typing import List
 
+from src.utils.visitor import Visitor
 from src.utils.program3.node import Node
 from src.utils.program3.functions.function import Function
 
@@ -32,5 +33,8 @@ class ClassBlock(Node):
 
     def __len__(self):
         return len(self.methods)
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_class_block(self)
 
     # TODO: regulate tabs in fancy string representation by external visitor

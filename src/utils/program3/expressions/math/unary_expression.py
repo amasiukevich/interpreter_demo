@@ -4,6 +4,7 @@ from src.utils.program3.values.value import Value
 from src.utils.program3.expressions.operators.operator import Operator
 from src.utils.program3.expressions.operators.negative_oper import NegativeOperator
 from src.utils.program3.expressions.operators.not_oper import NotOperator
+from src.utils.visitor import Visitor
 
 
 class UnaryExpression(Expression):
@@ -40,3 +41,6 @@ class UnaryExpression(Expression):
 
     def __repr__(self):
         return f"UnaryExpression(has_operator={bool(self.operator)})"
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_unary_expression(self)

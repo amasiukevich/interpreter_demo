@@ -13,7 +13,8 @@ class KeywordMapper:
         "in" : TokenType.IN,
         "return" : TokenType.RETURN,
         "true" : TokenType.BOOL_LITERAL,
-        "false" : TokenType.BOOL_LITERAL
+        "false" : TokenType.BOOL_LITERAL,
+        "null": TokenType.NULL_LITERAL
     }
 
     SINGLE_CHAR_MAP = {

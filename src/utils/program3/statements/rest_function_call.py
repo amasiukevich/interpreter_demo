@@ -1,5 +1,6 @@
 from src.utils.program3.node import Node
 from src.utils.program3.functions.arguments import Arguments
+from src.utils.visitor_old import Visitor
 
 
 class RestFunctionCall(Node):
@@ -12,3 +13,6 @@ class RestFunctionCall(Node):
 
     def __repr__(self):
         return "RestFunctionCall()"
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_rest_function_call(self)

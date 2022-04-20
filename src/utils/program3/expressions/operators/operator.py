@@ -2,6 +2,7 @@ from typing import List
 
 from src.exceptions import ValidationException
 from src.utils.program3.node import Node
+from src.utils.visitor_old import Visitor
 
 
 class Operator(Node):
@@ -20,3 +21,6 @@ class Operator(Node):
 
     def __repr__(self):
         return f"Operator(\"{self.oper}\")"
+
+    def accept(self, visitor: Visitor):
+        pass

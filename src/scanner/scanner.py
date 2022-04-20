@@ -43,8 +43,6 @@ class Scanner:
             return
         elif self.construct_comment():
             return
-        elif self.construct_keyword():
-            return
         else:
             self.token = Token(TokenType.UNKNOWN, position=self.token_position)
             raise ScanningException(self.token_position, "Unknown symbol")
@@ -218,7 +216,6 @@ class Scanner:
         """
         frac_value = 0
         exponent = self.ignore_zeros()
-
 
         while self.is_numerically_valid(self.source.get_char()):
 

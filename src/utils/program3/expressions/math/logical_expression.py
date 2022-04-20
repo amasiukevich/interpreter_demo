@@ -1,5 +1,6 @@
 from typing import List
 
+from src.utils.visitor import Visitor
 from src.utils.program3.expressions.expression import Expression
 from src.utils.program3.expressions.operators.operator import Operator
 
@@ -11,6 +12,9 @@ class LogicalExpression(Expression):
         if Expression.validate_expression_types(expressions):
             self.expressions = expressions
             self.operator = operator
+
+    def get_num_expressions(self):
+        return len(self.expressions)
 
     def __str__(self):
 
@@ -24,5 +28,8 @@ class LogicalExpression(Expression):
             logic_expr_string += ")"
 
         return logic_expr_string
+
+    def accept(self, visitor: Visitor):
+        pass
 
     # __repr__ is custom for every subclass

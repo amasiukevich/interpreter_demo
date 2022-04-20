@@ -1,4 +1,7 @@
-program ::= { function_definition | class_definition } ;
+program ::= declaration, {declaration};
+
+# In the IDLE mode there will be a function
+declaration ::= function_definition | class_definition | statement ;
 
 function_definition ::= identifier, "(", parameters, ")", block;
 class_definition ::= "class", identifier, class_block;
@@ -20,7 +23,7 @@ conditional ::= "if", or_expression, block,
                 ["else", block] ;
 
 loop ::= foreach_loop | while_loop ;
-return ::= "return", or_expression, ";" ;
+return ::= "return", {or_expression}, ";" ;
 comment ::= "#", comment_body;
 
 assign ::= complex_getter, "=", or_expression;
@@ -84,7 +87,8 @@ value ::= literal | complex_getter ;
 
 literal ::= string |
             number |
-            bool ;
+            bool |
+            "null";
 
 string = "\"", {character}, "\"" ;
 
@@ -97,6 +101,7 @@ integer_part ::=    non_zero_number |
 fractional_part ::= digit, {digit} ;
 
 bool ::= "true" | "false" ;
+
 non_zero_number ::= non_zero_digit, {digit} ;
 digit ::=   non_zero_digit |
             "0" ;

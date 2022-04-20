@@ -1,6 +1,7 @@
 from typing import List
 
 from src.exceptions import ValidationException
+from src.utils.visitor import Visitor
 from src.utils.program3.block import Block
 from src.utils.program3.expressions.expression import Expression
 from src.utils.program3.statements.statement import Statement
@@ -51,6 +52,9 @@ class Conditional(Statement):
             raise ValidationException("Inconsistent number of blocks and expressions in conditional")
         return is_valid
 
+    def is_single_if(self):
+        return len(self.expressions) == len(self.blocks) and len(self.blocks) == 1
+
     def __str__(self):
 
         base_conditional_string = f"if {self.expressions[0]} {self.blocks[0]}"
@@ -67,4 +71,8 @@ class Conditional(Statement):
         return f"Conditional(num_else_ifs={self.num_else_ifs}, " \
                f"has_else={len(self.expressions) > 1})"
 
+    def accept(self, visitor: Visitor):
+        visitor.visit_conditional(self)
+
     # TODO: make fancy looking code including tabs with external visitor
+

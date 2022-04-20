@@ -1,3 +1,4 @@
+from src.utils.visitor import Visitor
 from src.utils.program3.statements.statement import Statement
 
 
@@ -14,3 +15,6 @@ class Comment(Statement):
 
     def __eq__(self, other):
         return self.body == other.body
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_comment(self)

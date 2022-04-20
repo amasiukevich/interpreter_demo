@@ -1,3 +1,4 @@
+from src.utils.visitor_old import Visitor
 from src.utils.program3.expressions.expression import Expression
 from src.utils.program3.statements.statement import Statement
 
@@ -8,7 +9,14 @@ class Return(Statement):
         self.expression = expression
 
     def __str__(self):
-        return f"return {self.expression};"
+        if self.expression:
+            string = f"return {self.expression};"
+        else:
+            string = f"return;"
+        return string
 
     def __repr__(self):
         return "Return()"
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_return(self)

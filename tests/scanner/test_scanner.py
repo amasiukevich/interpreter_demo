@@ -177,7 +177,7 @@ class TestScanner(unittest.TestCase):
         self.base_exception_test_function(string_io, exception_text)
 
     def test_construct_keyword(self):
-        string_io = io.StringIO("class this if else foreach while in return true false")
+        string_io = io.StringIO("class this if else foreach while in return true false null")
         tokens = self.base_test_function(string_io)
         self.assertListEqual(
             tokens, [
@@ -190,7 +190,8 @@ class TestScanner(unittest.TestCase):
                 Token(TokenType.IN, position=Position(1, 34), value="in"),
                 Token(TokenType.RETURN, position=Position(1, 37), value="return"),
                 Token(TokenType.BOOL_LITERAL, position=Position(1, 44), value="true"),
-                Token(TokenType.BOOL_LITERAL, position=Position(1, 49), value="false")
+                Token(TokenType.BOOL_LITERAL, position=Position(1, 49), value="false"),
+                Token(TokenType.NULL_LITERAL, position=Position(1, 55), value="null")
             ]
         )
 

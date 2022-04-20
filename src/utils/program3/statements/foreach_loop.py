@@ -1,3 +1,4 @@
+from src.utils.visitor_old import Visitor
 from src.utils.program3.block import Block
 from src.utils.program3.expressions.expression import Expression
 from src.utils.program3.statements.loop import Loop
@@ -17,5 +18,8 @@ class ForeachLoop(Loop):
         return f"ForeachLoop(identifier={self.identifier}, " \
                f"expression={self.expression}), " \
                f"block={self.block})"
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_foreach_loop(self)
 
     # TODO: Fancy tostring using visitor

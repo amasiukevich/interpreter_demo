@@ -2,6 +2,7 @@ from typing import List
 
 from src.utils.program3.values.value import Value
 from src.utils.program3.values.iterative_getter import IterativeGetter
+from src.utils.visitor import Visitor
 
 
 class ComplexGetter(Value):
@@ -21,3 +22,18 @@ class ComplexGetter(Value):
     def __repr__(self):
         return f"ComplexGetter(has_this={self.has_this}, " \
                f"num_iterative_getters={len(self.iterative_getters)})"
+
+    def get_last_getter(self):
+        return self.iterative_getters[-1]
+
+    def get_last_identifier(self):
+        try:
+            return self.iterative_getters[-1].identifier
+        except:
+            print("Hey ther")
+
+    def get_call_arguments(self):
+        return self.iterative_getters[-1].arguments
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_complex_getter(self)

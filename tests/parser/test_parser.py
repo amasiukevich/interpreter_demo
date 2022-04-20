@@ -1,7 +1,7 @@
 import io
 import unittest
 
-from src.data_sources import StringSource, FileSource
+from src.data_sources import StringSource
 from src.parser import Parser
 from src.scanner import Scanner
 from src.utils.program3.block import Block
@@ -24,52 +24,16 @@ from src.utils.program3.statements.func_call import FunctionCall
 from src.utils.program3.statements.while_loop import WhileLoop
 from src.utils.program3.values.complex_getter import ComplexGetter
 from src.utils.program3.statements.conditional import Conditional
+from src.utils.program3.values.iterative_getter import CallGetter
 from src.utils.program3.values.literals.bool_literal import BoolLiteral
 from src.utils.program3.values.literals.float_literal import FloatLiteral
 from src.utils.program3.values.literals.int_literal import IntLiteral
 from src.utils.program3.values.literals.string_literal import StringLiteral
+from src.utils.program3.values.literals.null_literal import NullLiteral
 
 
 class TestParser(unittest.TestCase):
 
-    # TODO: Test program, functions and classes
-
-    # TODO: Test program
-
-    def test_parse_program(self):
-
-        import os
-        print(os.getcwd())
-
-        filenames = [
-            "../../grammar_stuff/sample_codes_new/arithmetical_expression.txt",
-            "../../grammar_stuff/sample_codes_new/class.txt",
-            "../../grammar_stuff/sample_codes_new/function_as_argument.txt",
-            "../../grammar_stuff/sample_codes_new/list_attributes.txt",
-            "../../grammar_stuff/sample_codes_new/recursion.txt"
-        ]
-
-        parsed = []
-
-        for filename in filenames:
-            file_obj = open(filename, 'r')
-            data_source = FileSource(file_obj)
-            scanner = Scanner(data_source)
-            parser = Parser(scanner)
-            parsed_program = parser.parse_program()
-            parsed.append(parsed_program)
-            file_obj.close()
-
-        self.assertListEqual(
-            [(type(program), len(program.functions), len(program.classes)) for program in parsed],
-            [
-                (Program, 2, 0),
-                (Program, 1, 2),
-                (Program, 4, 0),
-                (Program, 1, 1),
-                (Program, 3, 0)
-            ]
-        )
 
     def test_function(self):
 
@@ -129,6 +93,7 @@ class TestParser(unittest.TestCase):
             ]
         )
 
+
     def test_block(self):
 
         programs = [
@@ -162,8 +127,8 @@ class TestParser(unittest.TestCase):
             "return 2;",
             "return 3 + 3;",
             "return value;",
-            'return this.get_value()[10];'
-            "return this.get_value(alpha)[10];"
+            'return this.get_value();'
+            "return this.get_value(alpha);"
         ]
 
         parsed = []
@@ -273,7 +238,7 @@ class TestParser(unittest.TestCase):
 
         programs = [
             "print(a);",
-            "this.get_children()[10].get_name();"
+            "this.get_children().get_name();"
             "parent.get_attributes();"
         ]
 
@@ -292,12 +257,7 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(
             True,
-            all([program.complex_getter.iterative_getters[-1].slicing_expr is None for program in parsed])
-        )
-
-        self.assertEqual(
-            True,
-            all([program.complex_getter.iterative_getters[-1].rest_func_call is not None for program in parsed])
+            all([isinstance(program.complex_getter.get_last_getter(), CallGetter) for program in parsed])
         )
 
     def test_while_loop(self):
@@ -409,11 +369,11 @@ class TestParser(unittest.TestCase):
     def test_add_expression(self):
 
         programs = [
-            "2 + 2 * 2",
-            "3*5 - (2 * 7)",
-            "3 * 5 - (127 % 20)",
+            # "2 + 2 * 2",
+            # "3*5 - (2 * 7)",
+            # "3 * 5 - (127 % 20)",
             "value * 1000 + percent",
-            "this.get_children()[1].get_age() - this.get_children()[0].get_age()"
+            "this.get_children().get_age() - this.get_children().get_age()"
         ]
 
         parsed = []
@@ -480,7 +440,8 @@ class TestParser(unittest.TestCase):
             "2.5",
             "true",
             "false",
-            '\"Something in the way she moves\"'
+            '\"Something in the way she moves\"',
+            "null"
         ]
 
         parsed = []
@@ -498,6 +459,7 @@ class TestParser(unittest.TestCase):
                 (FloatLiteral, 2.5),
                 (BoolLiteral, True),
                 (BoolLiteral, False),
-                (StringLiteral, "Something in the way she moves")
+                (StringLiteral, "Something in the way she moves"),
+                (NullLiteral, None)
             ]
         )

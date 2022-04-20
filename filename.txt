@@ -1,0 +1,29 @@
+class Person {
+
+    Person(this, name) {
+        this.name = name;
+    }
+
+    sayHello() {
+        print("Hey, " + this.name);
+    }
+}
+
+calculate_discount(total, percent) {
+    return total * 0.01 * percent;
+}
+
+factorial(n) {
+    if n == 0 || n == 1 {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+main() {
+    # print("Hey there");
+    anton = Person("Anton");
+#     print(anton.name);
+    anton.sayHello();
+}

@@ -1,5 +1,6 @@
 from typing import List
 
+from src.utils.visitor import Visitor
 from src.exceptions import ValidationException
 from src.utils.program3.expressions.expression import Expression
 from src.utils.program3.expressions.operators.operator import Operator
@@ -15,6 +16,9 @@ class ArithmeticExpression(Expression):
 
             self.expressions = expressions
             self.operators = operators
+
+    def get_num_expressions(self):
+        return len(self.expressions)
 
     @staticmethod
     def validate_differs_in_one(expressions, operators):
@@ -37,5 +41,8 @@ class ArithmeticExpression(Expression):
             arithm_expr_string += ")"
 
         return arithm_expr_string
+
+    def accept(self, visitor: Visitor):
+        pass
 
     # repr is custom

@@ -3,6 +3,7 @@ from typing import List
 from src.exceptions import ValidationException
 from src.utils.program3.node import Node
 from src.utils.program3.statements.statement import Statement
+from src.utils.visitor import Visitor
 
 
 class Block(Node):
@@ -13,6 +14,9 @@ class Block(Node):
             raise ValidationException("All component statements in block should be of Statement datatype")
 
         self.statements = statements
+
+    def get_statements(self):
+        return self.statements
 
     def __eq__(self, other):
         return len(self.statements) == len(other.statements)
@@ -28,5 +32,8 @@ class Block(Node):
 
     def __repr__(self):
         return f"Block(n_statements={len(self.statements)})"
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_block(self)
 
     # TODO: Beautify __str__ after visiting

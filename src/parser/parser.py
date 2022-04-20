@@ -5,6 +5,7 @@ from src.scanner.scanner import Scanner
 
 # Common utils
 from src.utils.program3.statements.func_call import FunctionCall
+from src.utils.program3.values.literals.null_literal import NullLiteral
 from src.utils.token import Token
 from src.utils.token_type import TokenType
 
@@ -31,7 +32,7 @@ from src.utils.program3.statements.rest_function_call import RestFunctionCall
 from src.utils.program3.statements.while_loop import WhileLoop
 from src.utils.program3.statements._return import Return
 from src.utils.program3.values.complex_getter import ComplexGetter
-from src.utils.program3.values.iterative_getter import IterativeGetter
+from src.utils.program3.values.iterative_getter import IterativeGetter, IdentifierGetter, CallGetter
 
 # Expressions
 from src.utils.program3.expressions.expression import Expression
@@ -71,14 +72,20 @@ class Parser:
         functions = []
         classes = []
 
-        while self.scanner.get_token().token_type != TokenType.EOF:
+        while (function := self.parse_function()) or (_class := self.parse_class()):
 
-            if function := self.parse_function():
+            if function:
                 functions.append(function)
+                function = None
 
-            if _class := self.parse_class():
+            if _class:
                 classes.append(_class)
+                _class = None
 
+        # try:
+        self.must_be_token(TokenType.EOF)
+        # except Exception:
+        #     print("Hey there")
         program = Program(functions, classes)
 
         return program
@@ -176,7 +183,7 @@ class Parser:
     def parse_statement(self) -> Optional[Statement]:
 
         # try parsing conditional
-        if statement := self.parse_conditional() :
+        if statement := self.parse_conditional():
             return statement
 
         # try parsing loops
@@ -296,6 +303,7 @@ class Parser:
             return assign_statement
 
         elif self.compare_and_consume(TokenType.SEMICOLON):
+            # TODO: Try to get it less artificial
             # meaning function call
             return FunctionCall(complex_getter)
 
@@ -305,8 +313,7 @@ class Parser:
         iter_getters = []
         if self.compare_and_consume(TokenType.THIS):
             has_this = True
-        elif self.compare_token_types(TokenType.IDENTIFIER):
-            iter_getter = self.parse_iterative_getter()
+        elif iter_getter := self.parse_iterative_getter():
             iter_getters.append(iter_getter)
         # TODO: alternatively use 'not recognized' flags
         else:
@@ -314,7 +321,10 @@ class Parser:
 
         while self.compare_and_consume(TokenType.ACCESS):
             iter_getter = self.parse_iterative_getter()
-            iter_getters.append(iter_getter)
+            if iter_getter:
+                iter_getters.append(iter_getter)
+            else:
+                raise Exception("Wrong complex_getter")
 
         if len(iter_getters) == 0:
             raise ValidationException(
@@ -322,27 +332,45 @@ class Parser:
 
         return ComplexGetter(has_this=has_this, iterative_getters=iter_getters)
 
-    def parse_iterative_getter(self) -> Optional[IterativeGetter]:
 
+    def parse_iterative_getter(self):
+
+        # TODO: in future maybe extend to slicings
         if self.compare_token_types(TokenType.IDENTIFIER):
 
             identifier = self.scanner.get_token().value
             self.scanner.next_token()
 
-            rest_function_call = self.parse_rest_function_call()
-            slicing_expr = self.parse_slicing_expr()
+            # call getter case
+            if self.compare_and_consume(TokenType.OPEN_PARENTHESIS):
+                arguments = self.parse_arguments()
+                self.must_be_token(TokenType.CLOSING_PARENTHESIS,
+                                   f"Expected: {TokenType.CLOSING_PARENTHESIS}, got: {self.scanner.get_token().token_type}")
+                return CallGetter(identifier=identifier, arguments=arguments)
+            else:
+                return IdentifierGetter(identifier=identifier)
 
-            return IterativeGetter(identifier, rest_function_call, slicing_expr)
+    # def parse_iterative_getter(self) -> Optional[IterativeGetter]:
+    #
+    #     if self.compare_token_types(TokenType.IDENTIFIER):
+    #
+    #         identifier = self.scanner.get_token().value
+    #         self.scanner.next_token()
+    #
+    #         rest_function_call = self.parse_rest_function_call()
+    #         slicing_expr = self.parse_slicing_expr()
+    #
+    #         return IterativeGetter(identifier, rest_function_call, slicing_expr)
 
-    def parse_rest_function_call(self) -> Optional[RestFunctionCall]:
-
-        if self.compare_and_consume(TokenType.OPEN_PARENTHESIS):
-
-            arguments = self.parse_arguments()
-            self.must_be_token(TokenType.CLOSING_PARENTHESIS,
-                               f"Expected: {TokenType.CLOSING_PARENTHESIS}, got: {self.scanner.get_token().token_type}")
-
-            return RestFunctionCall(arguments)
+    # def parse_rest_function_call(self) -> Optional[RestFunctionCall]:
+    #
+    #     if self.compare_and_consume(TokenType.OPEN_PARENTHESIS):
+    #
+    #         arguments = self.parse_arguments()
+    #         self.must_be_token(TokenType.CLOSING_PARENTHESIS,
+    #                            f"Expected: {TokenType.CLOSING_PARENTHESIS}, got: {self.scanner.get_token().token_type}")
+    #
+    #         return RestFunctionCall(arguments)
 
     def parse_arguments(self) -> Optional[Arguments]:
 
@@ -497,7 +525,7 @@ class Parser:
             expression_components.append(mult_expression)
             while self.is_add_token():
 
-                operator = self.parse_operator()
+                operator = self.parse_operator(is_additive=True)
 
                 if not operator:
                     raise ValidationException(
@@ -592,18 +620,17 @@ class Parser:
         else:
             return self.parse_value()
 
-    def parse_operator(self) -> Optional[Operator]:
+    def parse_operator(self, is_additive=False) -> Optional[Operator]:
 
         token_type = self.scanner.get_token().token_type
 
         operator = self.oper_mapper.token_to_operator.get(token_type)
         additive_operator = self.oper_mapper.token_to_operator_additive.get(token_type)
-        if operator:
-            self.scanner.next_token()
-            return operator
-        elif additive_operator:
-            self.scanner.next_token()
-            return additive_operator
+        
+        result = additive_operator if is_additive else operator
+
+        self.scanner.next_token()
+        return result
 
     def parse_value(self) -> Optional[Value]:
 
@@ -631,6 +658,8 @@ class Parser:
         elif token.token_type == TokenType.BOOL_LITERAL:
             value = Literal.BOOLEAN_FILTER.get(token.value)
             literal = BoolLiteral(value=value)
+        elif token.token_type == TokenType.NULL_LITERAL:
+            literal = NullLiteral()
         else:
             raise Exception(f"Unknown type of literal\n{token}\n")
 
@@ -638,9 +667,10 @@ class Parser:
         return literal
 
     def is_literal(self, token_type: TokenType) -> bool:
-        return token_type == TokenType.NUMERIC_LITERAL or \
-               token_type == TokenType.STRING_LITERAL or \
-               token_type == TokenType.BOOL_LITERAL
+        return  token_type == TokenType.NUMERIC_LITERAL or \
+                token_type == TokenType.STRING_LITERAL or \
+                token_type == TokenType.BOOL_LITERAL or \
+                token_type == TokenType.NULL_LITERAL
 
     def check_current_token(self, token_type: TokenType, error_msg: str="") -> None:
         token = self.scanner.get_token()

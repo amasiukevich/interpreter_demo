@@ -1,25 +1,29 @@
 from src.exceptions import ValidationException
 from src.utils.program3.statements.statement import Statement
 from src.utils.program3.values.complex_getter import ComplexGetter
+from src.utils.program3.values.iterative_getter import CallGetter
+from src.utils.visitor import Visitor
 
 
 class FunctionCall(Statement):
 
     def __init__(self, complex_getter: ComplexGetter):
 
-        if FunctionCall.validate_function_call(complex_getter):
-            self.complex_getter = complex_getter
+        self.getter = complex_getter
+        self.callee_name = self.getter.get_last_identifier()
+        self.arguments = self.getter.get_call_arguments()
 
-    @staticmethod
-    def validate_function_call(complex_getter: ComplexGetter):
-        if complex_getter.iterative_getters[-1].slicing_expr is not None or \
-            complex_getter.iterative_getters[-1].rest_func_call is None:
+    def get_arguments(self):
+        return self.arguments.arguments
 
-            raise ValidationException("Invalid function call")
-        return True
+    def get_callee_name(self):
+        return self.callee_name
 
     def __str__(self):
-        return f"{self.complex_getter};"
+        return f"{self.getter};"
 
     def __repr__(self):
-        return "FunctionCall()"
+        return "FunctionCall();"
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_function_call(self)

@@ -4,6 +4,8 @@ from src.utils.program3.expressions.operators.operator import Operator
 
 from typing import List
 
+from src.utils.visitor import Visitor
+
 
 class MultiplyExpression(ArithmeticExpression):
 
@@ -18,3 +20,6 @@ class MultiplyExpression(ArithmeticExpression):
     def __repr__(self):
         operators_string = "[" + ", ".join([str(operator) for operator in self.operators]) + "]"
         return f"MultiplyExpression(operators={operators_string}, {len(self.expressions)})"
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_mult_expression(self)

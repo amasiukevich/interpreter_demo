@@ -60,6 +60,7 @@ class TokenType(Enum):
     BOOL_LITERAL = auto()               # true or false
     STRING_LITERAL = auto()             # "String"
     NUMERIC_LITERAL = auto()            # 123 or -123
+    NULL_LITERAL = auto()               # null
 
     UNKNOWN = auto()
     EOF = auto()                        # end of file

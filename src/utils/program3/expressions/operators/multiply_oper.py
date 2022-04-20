@@ -1,4 +1,5 @@
 from src.utils.program3.expressions.operators.operator import Operator
+from src.utils.visitor import Visitor
 
 
 class MultiplyOperator(Operator):
@@ -8,3 +9,6 @@ class MultiplyOperator(Operator):
 
     def __eq__(self, other):
         return type(self) == type(other)
+
+    def accept(self, visitor: Visitor):
+        visitor.visit_multiply_oper(self)
