@@ -19,4 +19,4 @@ class RelationExpression(ComparingExpression):
         return f"RelationExpression(operator={self.operator}, {len(self.expressions)})"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_rel_expression(self)
+        return visitor.visit_rel_expression(self)

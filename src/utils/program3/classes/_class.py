@@ -1,3 +1,5 @@
+from typing import List
+
 from src.exceptions import ValidationException
 from src.utils.program3.node import Node
 from src.utils.program3.classes.class_block import ClassBlock
@@ -31,7 +33,7 @@ class Class(Node):
     def __repr__(self):
         return f"Class(identifier=\"{self.identifier}\")"
 
-    def accept(self, visitor: Visitor):
-        visitor.visit_class(self)
+    def accept(self, visitor: Visitor, constructor_params: List=[]):
+        visitor.visit_class(self, constructor_params)
 
     # TODO: regulate tabs in string representation using external visitor

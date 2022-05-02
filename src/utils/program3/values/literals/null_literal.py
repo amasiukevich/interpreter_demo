@@ -14,4 +14,5 @@ class NullLiteral(Literal):
         return f"NullLiteral()"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_null_literal(self)
+        return visitor.visit_literal(self)
+

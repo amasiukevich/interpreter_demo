@@ -9,10 +9,8 @@ from src.utils.visitor import Visitor
 class Block(Node):
 
     def __init__(self, statements: List[Statement] = []):
-
         if len(statements) > 0 and not all([isinstance(statement, Statement) for statement in statements]):
             raise ValidationException("All component statements in block should be of Statement datatype")
-
         self.statements = statements
 
     def get_statements(self):

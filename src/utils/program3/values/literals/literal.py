@@ -1,7 +1,7 @@
 from abc import ABCMeta
 
 from src.utils.program3.values.value import Value
-from src.utils.visitor_old import Visitor
+from src.utils.visitor import Visitor
 
 
 class Literal(Value, metaclass=ABCMeta):

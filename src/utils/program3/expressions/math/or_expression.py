@@ -17,4 +17,4 @@ class OrExpression(LogicalExpression):
         return f"OrExpression(n_expressions={len(self.expressions)})"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_or_expression(self)
+        return visitor.visit_or_expression(self)

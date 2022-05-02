@@ -14,15 +14,14 @@ from src.utils.program3.expressions.math.or_expression import OrExpression
 from src.utils.program3.expressions.math.relation_expression import RelationExpression
 from src.utils.program3.expressions.math.unary_expression import UnaryExpression
 from src.utils.program3.functions.function import Function
-from src.utils.program3.program import Program
 
 from src.utils.program3.statements._return import Return
 from src.utils.program3.statements.assign import Assign
 from src.utils.program3.statements.comment import Comment
+from src.utils.program3.statements.complex_getter import ComplexGetter
 from src.utils.program3.statements.foreach_loop import ForeachLoop
 from src.utils.program3.statements.func_call import FunctionCall
 from src.utils.program3.statements.while_loop import WhileLoop
-from src.utils.program3.values.complex_getter import ComplexGetter
 from src.utils.program3.statements.conditional import Conditional
 from src.utils.program3.values.iterative_getter import CallGetter
 from src.utils.program3.values.literals.bool_literal import BoolLiteral
@@ -252,12 +251,12 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(
             True,
-            all([isinstance(parsed_program, FunctionCall) for parsed_program in parsed])
+            all([isinstance(parsed_program, ComplexGetter) for parsed_program in parsed])
         )
 
         self.assertEqual(
             True,
-            all([isinstance(program.complex_getter.get_last_getter(), CallGetter) for program in parsed])
+            all([isinstance(program.get_last_getter(), CallGetter) for program in parsed])
         )
 
     def test_while_loop(self):

@@ -43,4 +43,4 @@ class UnaryExpression(Expression):
         return f"UnaryExpression(has_operator={bool(self.operator)})"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_unary_expression(self)
+        return visitor.visit_unary_expression(self)

@@ -1,6 +1,6 @@
 from typing import List
 
-from src.utils.visitor_old import Visitor
+from src.utils.visitor import Visitor
 from src.utils.program3.node import Node
 from src.utils.program3.expressions.expression import Expression
 
@@ -17,4 +17,4 @@ class Arguments(Node):
         return f"Arguments(n_args={len(self.arguments)})"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_arguments()
+        return visitor.visit_arguments(self)

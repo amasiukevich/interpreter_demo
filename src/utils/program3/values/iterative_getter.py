@@ -69,7 +69,7 @@ class IdentifierGetter(IterativeGetter):
         return self.identifier
 
     def accept(self, visitor: Visitor):
-        visitor.visit_identifier_getter(self)
+        return visitor.visit_identifier_getter(self)
 
 
 class CallGetter(IterativeGetter):
@@ -91,8 +91,8 @@ class CallGetter(IterativeGetter):
     def get_arguments(self):
         return self.arguments.arguments
 
-    def accept(self, visitor: Visitor):
-        visitor.visit_call_getter(self)
+    def accept(self, visitor: Visitor, scope_to_push=None):
+        visitor.visit_call_getter(self, scope_to_push)
 
 
 # TODO: Maybe slicing after call getter

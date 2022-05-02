@@ -28,11 +28,10 @@ from src.utils.program3.statements.assign import Assign
 from src.utils.program3.statements.comment import Comment
 from src.utils.program3.statements.conditional import Conditional
 from src.utils.program3.statements.foreach_loop import ForeachLoop
-from src.utils.program3.statements.rest_function_call import RestFunctionCall
 from src.utils.program3.statements.while_loop import WhileLoop
 from src.utils.program3.statements._return import Return
-from src.utils.program3.values.complex_getter import ComplexGetter
-from src.utils.program3.values.iterative_getter import IterativeGetter, IdentifierGetter, CallGetter
+from src.utils.program3.statements.complex_getter import ComplexGetter
+from src.utils.program3.values.iterative_getter import IdentifierGetter, CallGetter
 
 # Expressions
 from src.utils.program3.expressions.expression import Expression
@@ -290,7 +289,7 @@ class Parser:
             token = self.scanner.get_token_and_move()
             return Comment(comment_body=token.value)
 
-    def parse_assign_or_function_call(self) -> Optional[Union[Assign, FunctionCall]]:
+    def parse_assign_or_function_call(self) -> Optional[Union[Assign, ComplexGetter]]:
 
         complex_getter = self.parse_complex_getter()
 
@@ -305,7 +304,7 @@ class Parser:
         elif self.compare_and_consume(TokenType.SEMICOLON):
             # TODO: Try to get it less artificial
             # meaning function call
-            return FunctionCall(complex_getter)
+            return complex_getter
 
     def parse_complex_getter(self) -> Optional[ComplexGetter]:
 

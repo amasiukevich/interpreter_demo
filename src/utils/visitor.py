@@ -12,7 +12,7 @@ class Visitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def visit_class(self, _class):
+    def visit_class(self, _class, constructor_params):
         pass
 
     @abstractmethod
@@ -24,7 +24,7 @@ class Visitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def visit_class_block(self, class_block):
+    def visit_class_block(self, class_block, instance):
         pass
 
     @abstractmethod
@@ -32,7 +32,7 @@ class Visitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def visit_native_function(self, native_function):
+    def visit_native_function(self, native_function, evaluated_args):
         pass
 
     @abstractmethod
@@ -68,47 +68,47 @@ class Visitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def visit_not_equal_oper(self, not_eq_oper):
+    def visit_not_equal_oper(self, not_eq_oper, value):
         pass
 
     @abstractmethod
-    def visit_not_oper(self, not_oper):
+    def visit_not_oper(self, not_oper, value):
         pass
 
     @abstractmethod
-    def visit_greater_equal_oper(self, ge_oper):
+    def visit_greater_equal_oper(self, ge_oper, left_value, right_value):
         pass
 
     @abstractmethod
-    def visit_greater_oper(self, gt_oper):
+    def visit_greater_oper(self, gt_oper, left_value, right_value):
         pass
 
     @abstractmethod
-    def visit_less_equal_oper(self, le_oper):
+    def visit_less_equal_oper(self, le_oper, left_value, right_value):
         pass
 
     @abstractmethod
-    def visit_less_oper(self, lt_oper):
+    def visit_less_oper(self, lt_oper, left_value, right_value):
         pass
 
     @abstractmethod
-    def visit_plus_oper(self, plus_operator):
+    def visit_plus_oper(self, plus_operator, left_value, right_value):
         pass
 
     @abstractmethod
-    def visit_minus_oper(self, minus_operator):
+    def visit_minus_oper(self, minus_operator, left_value, right_value):
         pass
 
     @abstractmethod
-    def visit_multiply_oper(self, mult_operator):
+    def visit_multiply_oper(self, mult_operator, left_value, right_value):
         pass
 
     @abstractmethod
-    def visit_divide_oper(self, div_operator):
+    def visit_divide_oper(self, div_operator, left_value, right_value):
         pass
 
     @abstractmethod
-    def visit_modulo_oper(self, modulo_operator):
+    def visit_modulo_oper(self, modulo_operator, left_value, right_value):
         pass
 
     @abstractmethod
@@ -120,20 +120,28 @@ class Visitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def visit_negative_oper(self, neg_oper, value=None):
+        pass
+
+    @abstractmethod
     def visit_literal(self, literal):
         pass
 
     @abstractmethod
-    def visit_complex_getter(self, complex_getter):
+    def visit_complex_getter(self, complex_getter, is_assign):
         pass
 
-    # @abstractmethod
-    # def visit_identifier_getter(self, identifier_getter):
-    #     pass
-    #
-    # @abstractmethod
-    # def visit_call_getter(self, call_getter):
-    #     pass
+    @abstractmethod
+    def visit_arguments(self, arguments):
+        pass
+
+    @abstractmethod
+    def visit_identifier_getter(self, identifier_getter):
+        pass
+
+    @abstractmethod
+    def visit_call_getter(self, call_getter, scope_to_push):
+        pass
 
     @abstractmethod
     def visit_variable(self, variable):

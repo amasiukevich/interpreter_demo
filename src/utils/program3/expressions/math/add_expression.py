@@ -20,4 +20,4 @@ class AddExpression(ArithmeticExpression):
         return f"AddExpression(operator={operators_string}, {len(self.expressions)})"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_add_expression(self)
+        return visitor.visit_add_expression(self)

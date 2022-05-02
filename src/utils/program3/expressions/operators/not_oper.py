@@ -10,5 +10,5 @@ class NotOperator(Operator):
     def __eq__(self, other):
         return type(self) == type(other)
 
-    def accept(self, visitor: Visitor):
-        visitor.visit_not_oper(self)
+    def accept(self, visitor: Visitor, value):
+        return visitor.visit_not_oper(self, value)

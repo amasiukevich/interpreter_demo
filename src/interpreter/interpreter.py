@@ -1,6 +1,3 @@
-import typing
-from typing import Optional
-
 from src.exceptions import InterpretingException, RuntimeException
 from src.utils.interpreter_utils.peramolang_callable import PeramolangCallable, NativeFunction, PeramolangFunction, \
     ReturnObj
@@ -23,13 +20,13 @@ from src.utils.program3.statements.func_call import FunctionCall
 from src.utils.program3.statements.rest_function_call import RestFunctionCall
 from src.utils.program3.statements.statement import Statement
 from src.utils.program3.statements.while_loop import WhileLoop
-from src.utils.program3.values.complex_getter import ComplexGetter
+from src.utils.program3.statements.complex_getter import ComplexGetter
 from src.utils.program3.values.literals.literal import Literal
 
 from src.utils.program3.variable import Variable
 from src.utils.visitor_old import Visitor
 
-from src.utils.interpreter_utils.environment import Environment, DummyEnvironment
+from src.utils.interpreter_utils.environment import DummyEnvironment
 
 
 from src.utils.program3.expressions.operators import *

@@ -3,6 +3,7 @@ from src.utils.program3.variable import Variable
 
 class Scope:
 
+    # TODO: Do we need Variable???
     def __init__(self):
         self.variables = {}
 

@@ -21,6 +21,9 @@ class Function(Node, AbcFunction):
     def get_params(self):
         return self.params
 
+    def get_param_names(self):
+        return self.params.get_param_names()
+
     def get_block(self):
         return self.block
 

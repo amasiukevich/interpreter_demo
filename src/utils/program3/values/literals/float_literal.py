@@ -1,6 +1,6 @@
 from src.exceptions import ValidationException
 from src.utils.program3.values.literals.literal import Literal
-from src.utils.visitor_old import Visitor
+from src.utils.visitor import Visitor
 
 
 class FloatLiteral(Literal):
@@ -20,4 +20,4 @@ class FloatLiteral(Literal):
         return f"FloatLiteral(value={self.value})"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_literal(self)
+        return visitor.visit_literal(self)

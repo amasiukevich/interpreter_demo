@@ -10,5 +10,5 @@ class EqualityOperator(Operator):
     def __eq__(self, other):
         return type(self) == type(other)
 
-    def accept(self, visitor: Visitor):
-        visitor.visit_equal_oper(self)
+    def accept(self, visitor: Visitor, left_value, right_value):
+        return visitor.visit_equal_oper(self, left_value, right_value)

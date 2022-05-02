@@ -22,4 +22,4 @@ class MultiplyExpression(ArithmeticExpression):
         return f"MultiplyExpression(operators={operators_string}, {len(self.expressions)})"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_mult_expression(self)
+        return visitor.visit_mult_expression(self)

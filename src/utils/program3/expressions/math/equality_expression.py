@@ -19,4 +19,4 @@ class EqualityExpression(ComparingExpression):
         return f"EqualityExpression(operators={self.operator}, {len(self.expressions)})"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_eq_expression(self)
+        return visitor.visit_eq_expression(self)

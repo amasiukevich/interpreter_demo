@@ -5,9 +5,8 @@ from src.utils.position import Position
 
 class RuntimeException(Exception):
 
-    def __init__(self, token, message):
+    def __init__(self, message=""):
         super().__init__(message)
-        self.token = token
         self.message = message
 
     def get_message(self):

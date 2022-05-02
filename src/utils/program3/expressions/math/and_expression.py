@@ -17,4 +17,4 @@ class AndExpression(LogicalExpression):
         return f"AndExpression(n_expressions={len(self.expressions)})"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_and_expression(self)
+        return visitor.visit_and_expression(self)

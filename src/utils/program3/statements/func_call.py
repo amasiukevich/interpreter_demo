@@ -1,7 +1,5 @@
-from src.exceptions import ValidationException
 from src.utils.program3.statements.statement import Statement
-from src.utils.program3.values.complex_getter import ComplexGetter
-from src.utils.program3.values.iterative_getter import CallGetter
+from src.utils.program3.statements.complex_getter import ComplexGetter
 from src.utils.visitor import Visitor
 
 

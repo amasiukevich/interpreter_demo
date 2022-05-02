@@ -4,6 +4,8 @@ from .call_context import CallContext
 from .scope import Scope
 from src.utils.program3.variable import Variable
 from src.utils.program3.values.value import Value
+from .call_utils import NativeFunction
+from ..program3.values.literals.null_literal import NullLiteral
 
 
 class Environment:
@@ -15,14 +17,22 @@ class Environment:
 
         self.push_new_call_context()
 
-        self.returned_with_value = False
-        self.returned = False
+        self.returned = (False, None)
 
-    def push_new_call_context(self):
-        self.call_contexts.appendleft(CallContext())
+        self.set_native_functions()
 
-    def push_new_scope(self):
-        self.call_contexts[0].push_scope(Scope())
+    def set_native_functions(self):
+        native_print = NativeFunction(arity=1, call_func=print)
+        self.add_variable(Variable(name='print', value=native_print))
+
+    def push_new_call_context(self, scope=None):
+        self.call_contexts.appendleft(CallContext(scope))
+        self.set_native_functions()
+
+    def push_scope(self, scope=None):
+        if not scope:
+            scope = Scope()
+        self.call_contexts[0].push_scope(scope)
 
     def pop_scope(self):
         self.call_contexts[0].pop_scope()
@@ -33,19 +43,8 @@ class Environment:
     def add_variable(self, var: Variable):
         self.call_contexts[0].add_variable(var)
 
-    # TODO: for classes, objects and stuff
-    # TODO: maybe pass some context
-    def add_fancy_variable(self, var: Variable, call_context: CallContext):
-        needed_idx = self.call_contexts.index(call_context)
-        self.call_contexts[needed_idx].add_variable()
-
     def get_variable(self, name: str):
         return self.call_contexts[0].get_variable(name)
-
-    # TODO: for classes, objects and stuff
-    # TODO: maybe pass some context
-    def get_fancy_variable(self):
-        pass
 
     def push_value(self, value: Value):
         self.values.appendleft(value)
@@ -53,16 +52,15 @@ class Environment:
     def pop_value(self):
         return self.values.popleft()
 
-    # TODO: if broken/returned/continued there...
+    def set_returned(self, fact, value=None):
+        self.returned = (fact, value)
 
-    def is_returned_with_value(self):
-        return self.returned_with_value
+    def reset_returned(self):
+        self.set_returned(fact=False, value=None)
 
-    def is_returned(self):
+    def get_returned(self):
         return self.returned
 
-    def set_returned(self, val: bool):
-        self.returned = val
-
-    def set_returned_with_value(self, val: bool):
-        self.returned_with_value = val
+    def release_scopes(self, n_scopes: int):
+        for i in range(n_scopes):
+            self.pop_scope()

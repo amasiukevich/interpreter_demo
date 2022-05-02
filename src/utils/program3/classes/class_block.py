@@ -34,7 +34,7 @@ class ClassBlock(Node):
     def __len__(self):
         return len(self.methods)
 
-    def accept(self, visitor: Visitor):
-        visitor.visit_class_block(self)
+    def accept(self, visitor: Visitor, instance):
+        visitor.visit_class_block(self, instance)
 
     # TODO: regulate tabs in fancy string representation by external visitor

@@ -5,9 +5,11 @@ from src.utils.program3.variable import Variable
 
 class CallContext:
 
-    def __init__(self):
+    def __init__(self, scope=None):
         self.scopes = deque()
-        self.scopes.appendleft(Scope())
+        if not scope:
+            scope = Scope()
+        self.scopes.appendleft(scope)
 
     def push_scope(self, scope: Scope):
         self.scopes.appendleft(scope)

@@ -1,11 +1,13 @@
 from typing import List
 
+from src.utils.program3.statements.statement import Statement
 from src.utils.program3.values.value import Value
+
 from src.utils.program3.values.iterative_getter import IterativeGetter
 from src.utils.visitor import Visitor
 
 
-class ComplexGetter(Value):
+class ComplexGetter(Statement, Value):
 
     def __init__(self, has_this: bool, iterative_getters: List[IterativeGetter]):
         self.has_this = has_this
@@ -35,5 +37,5 @@ class ComplexGetter(Value):
     def get_call_arguments(self):
         return self.iterative_getters[-1].arguments
 
-    def accept(self, visitor: Visitor):
-        visitor.visit_complex_getter(self)
+    def accept(self, visitor: Visitor, is_assign=(False, None)):
+        return visitor.visit_complex_getter(self, is_assign=is_assign)

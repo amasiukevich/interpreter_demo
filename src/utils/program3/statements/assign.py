@@ -1,6 +1,6 @@
 from src.utils.visitor_old import Visitor
 from src.utils.program3.expressions.expression import Expression
-from src.utils.program3.values.complex_getter import ComplexGetter
+from src.utils.program3.statements.complex_getter import ComplexGetter
 from src.utils.program3.statements.statement import Statement
 
 

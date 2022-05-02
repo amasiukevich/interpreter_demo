@@ -5,10 +5,11 @@ from src.utils.visitor import Visitor
 class NotEqualOperator(Operator):
 
     def __init__(self):
+        super().__init__()
         self.oper = "!="
 
     def __eq__(self, other):
         return type(self) == type(other)
 
-    def accept(self, visitor: Visitor):
-        visitor.visit_not_equal_oper(self)
+    def accept(self, visitor: Visitor, left_value, right_value):
+        return visitor.visit_not_equal_oper(self, left_value, right_value)

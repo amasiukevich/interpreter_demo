@@ -1,6 +1,6 @@
 from src.exceptions import ValidationException
 from src.utils.program3.values.literals.literal import Literal
-from src.utils.visitor_old import Visitor
+from src.utils.visitor import Visitor
 
 
 class StringLiteral(Literal):
@@ -14,10 +14,10 @@ class StringLiteral(Literal):
         self.value = value
 
     def __str__(self):
-        return f"\"{self.value}\""
+        return f"{self.value}"
 
     def __repr__(self):
         return f"StringLiteral(value=\"{self.value}\")"
 
     def accept(self, visitor: Visitor):
-        visitor.visit_literal(self)
+        return visitor.visit_literal(self)
