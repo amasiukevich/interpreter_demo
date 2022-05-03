@@ -71,6 +71,8 @@ class Parser:
         functions = []
         classes = []
 
+        function, _class = None, None
+
         while (function := self.parse_function()) or (_class := self.parse_class()):
 
             if function:
@@ -260,7 +262,7 @@ class Parser:
         if self.compare_and_consume(TokenType.FOREACH):
             # Identifier
             self.check_current_token(TokenType.IDENTIFIER)
-            identifier = self.scanner.get_token_and_move()
+            identifier = self.scanner.get_token_and_move().value
 
             # IN
             self.must_be_token(TokenType.IN)

@@ -1,7 +1,8 @@
 calc_price_total(item_price, tax) {
-    return item_price * (1 + tax) / 100;
+    return item_price * (1 + tax / 100);
 }
 
 main() {
-    total_price = calc_price(1000, 10);
+    total_price = calc_price_total(1000, 10);
+    print(total_price);
 }

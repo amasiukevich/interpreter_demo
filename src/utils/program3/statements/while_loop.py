@@ -1,7 +1,7 @@
 from src.utils.program3.block import Block
 from src.utils.program3.expressions.expression import Expression
 from src.utils.program3.statements.loop import Loop
-from src.utils.visitor_old import Visitor
+from src.utils.visitor import Visitor
 
 
 class WhileLoop(Loop):

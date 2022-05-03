@@ -14,7 +14,7 @@ class BoolLiteral(Literal):
         self.value = value
 
     def __str__(self):
-        return f"{self.value}"
+        return f"{'true' if self.value else 'false'}"
 
     def __repr__(self):
         return f"BoolLiteral(value={self.value})"

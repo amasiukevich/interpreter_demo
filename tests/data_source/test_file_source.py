@@ -41,7 +41,6 @@ class TestFileSource(unittest.TestCase):
         with io.open(os.path.abspath('../../grammar_stuff/test_codes/test_arithmetic.txt')) as file_stream:
             file_source = FileSource(file_stream)
             i = 0
-            print("Hey there")
             while i < 52:
                 file_source.read_char()
                 i += 1

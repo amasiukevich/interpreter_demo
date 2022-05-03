@@ -17,17 +17,20 @@ main() {
     A = 1;
     B = 2;
     C = -3;
-    rate = 0.001;
+    rate = 0.01;
 
     # Gradient descend
     while i < 1000 {
-        loss = objective(x, A, B, C);
+        loss = objective(point, A, B, C);
         point = step_gradient(point, gradient(point, A, B, C), rate);
 
-        if i % 10 == 0 {
+        if i % 100 == 0 {
+            print("Iteration " + i);
             print(point);
             print(loss);
             print("\n");
         }
+
+        i = i + 1;
     }
 }

@@ -1,9 +1,11 @@
+from collections import deque
 from typing import List, Tuple
 
 ### Program Tree
 from src.utils.program3.program import Program
 from src.utils.program3.functions.function import Function
-from ..utils.interpreter2_utils.call_utils import NativeFunction
+from ..utils.interpreter2_utils.call_utils import NativeFunction, AbcFunction
+from ..utils.interpreter2_utils.scope import Scope
 from ..utils.program3.block import Block
 from ..utils.program3.classes._class import Class
 from ..utils.program3.classes.class_block import ClassBlock
@@ -22,6 +24,7 @@ from ..utils.program3.functions.parameters import Parameters
 from ..utils.program3.statements._return import Return
 from ..utils.program3.statements.assign import Assign
 from ..utils.program3.statements.conditional import Conditional
+from ..utils.program3.statements.foreach_loop import ForeachLoop
 from ..utils.program3.statements.func_call import FunctionCall
 from ..utils.program3.statements.while_loop import WhileLoop
 from src.utils.program3.statements.complex_getter import ComplexGetter
@@ -113,12 +116,12 @@ class Interpreter(Visitor):
                 variable.value = arg
             variable.accept(self)
 
-    def visit_block(self, block: Block):
+    def visit_block(self, block: Block, scope=None):
 
         if self.environment.get_returned()[0]:
             return
 
-        self.environment.push_scope()
+        self.environment.push_scope(scope)
         for statement in block.get_statements():
             statement.accept(self)
             if self.environment.get_returned()[0]:
@@ -132,6 +135,65 @@ class Interpreter(Visitor):
 
         # TODO: add here attributes
         # TODO: add here rec_attributes
+
+        def attributes(scope):
+            attrs = []
+            for name, var in scope.variables.items():
+                if var.value and not isinstance(var.value, AbcFunction) and not name == 'this':
+                    attrs.append(f"{name}: {var.value}")
+            return attrs
+
+        def rec_attrs_callable(scope):
+
+            attrs_to_visit = deque([(scope.get_variable('this'), 0)])
+
+            visited_attrs = []
+
+            while len(attrs_to_visit) > 0:
+                stack_item, current_indent = attrs_to_visit.pop()
+                if isinstance(stack_item.value, Instance):
+                    visited_attrs.append((stack_item.name, stack_item.value, current_indent))
+                    current_indent += 4
+                    for var in stack_item.value.scope.variables.values():
+                        if not isinstance(var.value, AbcFunction) and var.name != 'this':
+                            attrs_to_visit.append((var, current_indent))
+                    current_indent -= 4
+                elif not isinstance(stack_item.value, AbcFunction):
+                    visited_attrs.append((stack_item.name, stack_item.value, current_indent))
+
+            visited_attrs = [f"{' ' * indent}{name}: {value}" for name, value, indent in visited_attrs]
+
+            return visited_attrs
+
+        def has_attribute(scope, name_literal):
+            var = scope.get_variable(name_literal.value)
+            return BoolLiteral(var.value and not isinstance(var.value, AbcFunction))
+
+        instance.scope.add_variable(
+            Variable(name='attributes', value=NativeFunction(
+                    is_native_method=True,
+                    arity=1,
+                    call_func=attributes
+                )
+            )
+        )
+        instance.scope.add_variable(
+            Variable(name='rec_attributes', value=NativeFunction(
+                    is_native_method=True,
+                    arity=1,
+                    call_func=rec_attrs_callable
+                )
+            )
+        )
+
+        instance.scope.add_variable(
+            Variable(name='has_attr', value=NativeFunction(
+                    is_native_method=True,
+                    arity=2,
+                    call_func=has_attribute
+                )
+            )
+        )
 
         self.environment.push_scope(instance.scope)
         instance.scope.add_variable(Variable(name='this', value=instance))
@@ -152,9 +214,13 @@ class Interpreter(Visitor):
     def visit_function_call(self, function_call):
         pass
 
+    def visit_statement(self, statement):
+        pass
+
     def visit_native_function(self, native_function: NativeFunction, evaluated_args: List):
         val = native_function.call_func(*evaluated_args)
-        return val
+        if val:
+            self.environment.set_returned(fact=True, value=val)
 
     def visit_assign(self, assign: Assign):
 
@@ -163,52 +229,6 @@ class Interpreter(Visitor):
 
         # left_part
         assign.complex_getter.accept(self, is_assign=(True, right_val))
-
-    # Statements
-    # def visit_assign(self, assign: Assign):
-    #
-    #     # if self.environment.is_returned:
-    #     #     return
-    #
-    #     assign.expression.accept(self)
-    #     right_value = self.environment.pop_value()
-    #
-    #     # left part
-    #     env = self.environment
-    #     last_getter_idx = len(assign.complex_getter.iterative_getters) - 1
-    #     for i, it_getter in enumerate(assign.complex_getter.iterative_getters):
-    #
-    #         if isinstance(it_getter, IdentifierGetter):
-    #             var = env.get_variable(it_getter.get_identifier())
-    #             if var:
-    #                 if i != last_getter_idx and isinstance(var.value, Instance):
-    #                     env = var.value.environment
-    #                 else:
-    #                     var.set_value(right_value)
-    #             else:
-    #                 if i == last_getter_idx:
-    #                     variable = Variable(name=it_getter.get_identifier(), value=right_value)
-    #                     tmp_env, self.environment = self.environment, env
-    #                     variable.accept(self)
-    #                     self.environment = tmp_env
-    #                 else:
-    #                     # TODO: get there fancy message about not found attribute in object
-    #                     raise RuntimeException(message=f"Object has no attribute {it_getter.get_identifier()}")
-    #         elif isinstance(it_getter, CallGetter):
-    #             call_complex_getter = ComplexGetter(has_this=assign.complex_getter.has_this)
-    #             function_call_obj = FunctionCall(call_complex_getter)
-    #             tmp_env, self.environment = self.environment, env
-    #             function_call_obj.accept(self)
-    #
-    #             result = self.environment.pop_value()
-    #             self.environment = tmp_env
-    #             if i != last_getter_idx:
-    #                 if isinstance(result, Instance):
-    #                     env = result.environment
-    #                 else:
-    #                     raise Exception("Function call doesn't evaluate to object")
-    #             else:
-    #                 raise Exception("Cannot assign to function call")
 
     def visit_return(self, _return: Return):
 
@@ -222,13 +242,28 @@ class Interpreter(Visitor):
 
         condition, body = while_loop.expression, while_loop.block
         condition_value = condition.accept(self).value
-        try:
 
-            while condition_value and not self.environment.get_returned()[0]:
-                body.accept(self)
-                condition_value = condition.accept(self).value
-        except Exception as e:
-            print("Hey there")
+        while condition_value and not self.environment.get_returned()[0]:
+            body.accept(self)
+            condition_value = condition.accept(self).value
+
+    def visit_foreach_loop(self, foreach_loop: ForeachLoop):
+
+        # expression to evaluate to collection
+
+        # TODO: in future evaluate to generic collection in your language (LIST VALUE)
+        values_to_iterate = foreach_loop.expression.accept(self)
+        if not isinstance(values_to_iterate, list):
+            raise RuntimeException("Expression in foreach loop should evaluate to list")
+
+        # try:
+        for i in range(len(values_to_iterate)):
+
+            iterative_var = Variable(name=foreach_loop.identifier, value=values_to_iterate[i])
+            scope = Scope()
+            scope.add_variable(iterative_var)
+
+            foreach_loop.block.accept(self, scope)
 
     def visit_conditional(self, conditional: Conditional):
 
@@ -277,14 +312,12 @@ class Interpreter(Visitor):
         return result
 
     def visit_rel_expression(self, rel_expression: RelationExpression):
-        try:
-            left_value = rel_expression.expressions[0].accept(self)
-            right_value = rel_expression.expressions[1].accept(self)
 
-            result = rel_expression.operator.accept(self, left_value, right_value)
-            return result
-        except:
-            print("Hey there")
+        left_value = rel_expression.expressions[0].accept(self)
+        right_value = rel_expression.expressions[1].accept(self)
+
+        result = rel_expression.operator.accept(self, left_value, right_value)
+        return result
 
     def visit_add_expression(self, add_expression: AddExpression):
 
@@ -480,6 +513,7 @@ class Interpreter(Visitor):
                     if is_assign[0] and i == last_getter_idx:
                         new_var = Variable(name=getter.identifier, value=is_assign[1])
                         new_var.accept(self)
+                        self.environment.release_scopes(n_scopes=n_scopes_release)
                     else:
                         raise RuntimeException(f"No variable of name {getter.identifier}")
 
@@ -495,6 +529,7 @@ class Interpreter(Visitor):
                 else:
                     if result[0]:
                         to_return = result[1]
+                    self.environment.release_scopes(n_scopes=n_scopes_release)
 
                 self.environment.reset_returned()
 
@@ -505,8 +540,8 @@ class Interpreter(Visitor):
         return var
 
     def visit_call_getter(self, call_getter: CallGetter, scope_to_push=None):
-        identifier = call_getter.get_identifier()
 
+        identifier = call_getter.get_identifier()
 
         if function_var := self.environment.get_variable(identifier):
             call_obj = function_var.value
@@ -530,6 +565,8 @@ class Interpreter(Visitor):
                     call_obj.accept(self, evaluated_args)
 
                 elif isinstance(call_obj, NativeFunction):
+                    if call_obj.is_native_method:
+                        evaluated_args = [self.environment.get_scope()] + evaluated_args
                     call_obj.accept(self, evaluated_args)
         else:
             raise RuntimeException(f"Not found a function named {identifier}")
@@ -557,7 +594,6 @@ class Interpreter(Visitor):
             raise RuntimeException("Cannot apply negative operator to object other than int or float")
 
         return result
-
 
     def visit_variable(self, variable: Variable):
         self.environment.add_variable(variable)

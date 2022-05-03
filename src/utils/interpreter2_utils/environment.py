@@ -34,6 +34,9 @@ class Environment:
             scope = Scope()
         self.call_contexts[0].push_scope(scope)
 
+    def get_scope(self):
+        return self.call_contexts[0].get_scope()
+
     def pop_scope(self):
         self.call_contexts[0].pop_scope()
 

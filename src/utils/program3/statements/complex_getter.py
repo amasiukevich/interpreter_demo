@@ -29,10 +29,7 @@ class ComplexGetter(Statement, Value):
         return self.iterative_getters[-1]
 
     def get_last_identifier(self):
-        try:
-            return self.iterative_getters[-1].identifier
-        except:
-            print("Hey ther")
+        return self.iterative_getters[-1].identifier
 
     def get_call_arguments(self):
         return self.iterative_getters[-1].arguments

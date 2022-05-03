@@ -39,5 +39,6 @@ main() {
     hannah.child = sarah;
     sarah.pet = gosha;
 
-    print(hannah.child.pet.get_name())
+    print(hannah.child.pet.get_name());
+
 }

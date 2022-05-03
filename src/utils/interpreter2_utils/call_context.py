@@ -14,6 +14,9 @@ class CallContext:
     def push_scope(self, scope: Scope):
         self.scopes.appendleft(scope)
 
+    def get_scope(self):
+        return self.scopes[0]
+
     def pop_scope(self):
         self.scopes.popleft()
 

@@ -42,60 +42,60 @@ step_gradient (x , grad , rate ) {
 
 main() {
 
-    # SIMPLE ARITHMETIC
-    print("SIMPLE ARITHMETIC");
-
-    print();
-
-    a = 10;
-    b = 5;
-    print("a + b = " + (a + b));
-    print("a - b = " + (a - b));
-    print("a * b = " + (a * b));
-    print("a / b = " + (a / b));
-    print("a % b = " + (a % b));
-
-    print();
-
-    discount = calculate_discount(900, 9);
-    print("Discount is " + discount);
-
-    print("");
-
-    # GRADIENT DESCEND
-
-    print("GRADIENT DESCEND");
-
-    print("");
-    i = 0;
-    point = -10000;
-    A = 1;
-    B = 2;
-    C = -3;
-    rate = 0.01;
-    # Gradient descend
-    while i < 1000 {
-        loss = objective(point, A, B, C) ;
-        point = step_gradient(point, gradient(point, A, B, C), rate);
-        if i % 200 == 0 {
-            print("Iteration " + i);
-            print(point);
-            print(loss);
-            print();
-        }
-        i = i + 1;
-    }
-
-    print("");
+#     # SIMPLE ARITHMETIC
+#     print("SIMPLE ARITHMETIC");
+#
+#     print();
+#
+#     a = 10;
+#     b = 5;
+#     print("a + b = " + (a + b));
+#     print("a - b = " + (a - b));
+#     print("a * b = " + (a * b));
+#     print("a / b = " + (a / b));
+#     print("a % b = " + (a % b));
+#
+#     print();
+#
+#     discount = calculate_discount(900, 9);
+#     print("Discount is " + discount);
+#
+#     print("");
+#
+#     # GRADIENT DESCEND
+#
+#     print("GRADIENT DESCEND");
+#
+#     print("");
+#     i = 0;
+#     point = -10000;
+#     A = 1;
+#     B = 2;
+#     C = -3;
+#     rate = 0.01;
+#     # Gradient descend
+#     while i < 1001 {
+#         loss = objective(point, A, B, C) ;
+#         point = step_gradient(point, gradient(point, A, B, C), rate);
+#         if i % 200 == 0 {
+#             print("Iteration " + i);
+#             print(point);
+#             print(loss);
+#             print();
+#         }
+#         i = i + 1;
+#     }
+#
+#     print("");
 
    # RECURSION
-    print("RECURSION");
-
-    print();
-    n = 10;
-    print("Factorial of " + n + " is " + factorial(n));
-
-    print();
+#     print("RECURSION");
+#
+#     print();
+#     n = 40;
+#     print("Factorial of " + n + " is " + factorial(n));
+#
+#     print();
   # CLASSES
     print("CLASSES");
 
@@ -105,10 +105,22 @@ main() {
 
     anton.son = chris;
 
-    print(anton.name);
-    print(anton.son.name);
+    print(anton.has_attr("son"));
+
+    print(anton.getName());
+    print(anton.son.getName());
 
     anton.sayHello();
     anton.son.sayHello();
-    print()
+    print();
+
+    foreach attr in anton.rec_attributes(){
+        print(attr);
+    }
+
+    print();
+    foreach attr in chris.attributes() {
+        print(attr);
+    }
+
 }

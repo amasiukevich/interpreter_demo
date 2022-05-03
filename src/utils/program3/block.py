@@ -31,7 +31,7 @@ class Block(Node):
     def __repr__(self):
         return f"Block(n_statements={len(self.statements)})"
 
-    def accept(self, visitor: Visitor):
-        visitor.visit_block(self)
+    def accept(self, visitor: Visitor, scope=None):
+        visitor.visit_block(self, scope)
 
     # TODO: Beautify __str__ after visiting

@@ -36,6 +36,34 @@ class Visitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def visit_statement(self, statement):
+        pass
+
+    @abstractmethod
+    def visit_while_loop(self, while_loop):
+        pass
+
+    @abstractmethod
+    def visit_foreach_loop(self, foreach_loop):
+        pass
+
+    @abstractmethod
+    def visit_conditional(self, conditional):
+        pass
+
+    @abstractmethod
+    def visit_comment(self, comment):
+        pass
+
+    @abstractmethod
+    def visit_assign(self, assign):
+        pass
+
+    @abstractmethod
+    def visit_return(self, _return):
+        pass
+
+    @abstractmethod
     def visit_or_expression(self, or_expression):
         pass
 
