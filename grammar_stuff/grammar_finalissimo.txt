@@ -1,7 +1,7 @@
 program ::= declaration, {declaration};
 
 # In the IDLE mode there will be a function
-declaration ::= function_definition | class_definition | statement ;
+declaration ::= function_definition | class_definition | statement;
 
 function_definition ::= identifier, "(", parameters, ")", block;
 class_definition ::= "class", identifier, class_block;

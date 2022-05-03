@@ -70,10 +70,12 @@ class Parser:
 
         functions = []
         classes = []
+        statements = []
 
-        function, _class = None, None
+        function, _class, statement = None, None, None
 
-        while (function := self.parse_function()) or (_class := self.parse_class()):
+        while (function := self.parse_function()) or (_class := self.parse_class()) or \
+                    (statement := self.parse_statement()):
 
             if function:
                 functions.append(function)
@@ -83,11 +85,12 @@ class Parser:
                 classes.append(_class)
                 _class = None
 
-        # try:
+            if statement:
+                statements.append(statement)
+                statement = None
+
         self.must_be_token(TokenType.EOF)
-        # except Exception:
-        #     print("Hey there")
-        program = Program(functions, classes)
+        program = Program(functions, classes, statements)
 
         return program
 

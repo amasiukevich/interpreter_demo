@@ -1,9 +1,9 @@
 from abc import ABCMeta
 
 from src.utils.program3.expressions.expression import Expression
-from src.utils.visitor_old import Visitor
+from src.utils.visitor import Visitor
 
-# TODO: Do we need value???s
+# TODO: Do we need value???
 class Value(Expression):
     pass
     # def accept(self, visitor: Visitor):

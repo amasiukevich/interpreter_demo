@@ -1,79 +1,69 @@
 from collections import deque
-from typing import Optional, Union
-
-from src.exceptions import RuntimeException
-from src.utils.program3.values.value import Value
+from .call_utils import AbcFunction
+from .call_context import CallContext
+from .scope import Scope
 from src.utils.program3.variable import Variable
-from src.utils.interpreter_utils.call_context import CallContext
+from src.utils.program3.values.value import Value
+from .call_utils import NativeFunction
+from ..program3.values.literals.null_literal import NullLiteral
 
 
 class Environment:
 
     def __init__(self):
-        self.value_stack = deque()
-        self.call_stack = deque()
-        self.is_returned = False
+        # Stacks
+        self.values = deque()
+        self.call_contexts = deque()
 
-    def push_new_fcc(self):
-        self.call_stack.append(CallContext())
+        self.push_new_call_context()
 
-    @staticmethod
-    def is_empty_stack(stack):
-        return len(stack) == 0
+        self.returned = (False, None)
 
-    def pop_fcc(self):
-        if not Environment.is_empty_stack(self.call_stack):
-            return self.call_stack.pop()
+        self.set_native_functions()
 
-    def get_top_fcc(self) -> Optional[CallContext]:
-        if not Environment.is_empty_stack(self.call_stack):
-            return self.call_stack[-1]
+    def set_native_functions(self):
+        native_print = NativeFunction(arity=1, call_func=print)
+        self.add_variable(Variable(name='print', value=native_print))
 
-    def push_value(self, value: Value):
-        self.value_stack.append(value)
+    def push_new_call_context(self, scope=None):
+        self.call_contexts.appendleft(CallContext(scope))
+        self.set_native_functions()
 
-    def pop_value(self):
-        if Environment.is_empty_stack(self.value_stack):
-            return self.value_stack.pop()
+    def push_scope(self, scope=None):
+        if not scope:
+            scope = Scope()
+        self.call_contexts[0].push_scope(scope)
 
-    def get_variable(self, var_name: str) -> Optional[Variable]:
-        variable = self.get_top_fcc.get_variable(var_name)
-        if not variable:
-            variable = self.global_scope.get_variable(var_name)
-        # Search in global scope
-        if not variable:
-            # TODO: Custom exception here
-            raise Exception(f"Cannot find variable {var_name}")
+    def get_scope(self):
+        return self.call_contexts[0].get_scope()
 
-        return variable
+    def pop_scope(self):
+        self.call_contexts[0].pop_scope()
 
-    def get_is_returned(self):
-        return self.is_returned
-
-    def set_is_returned(self, is_returned):
-        self.is_returned = is_returned
+    def pop_call_context(self):
+        self.call_contexts.popleft()
 
     def add_variable(self, var: Variable):
-        self.get_top_fcc().add_variable(var)
+        self.call_contexts[0].add_variable(var)
 
+    def get_variable(self, name: str):
+        return self.call_contexts[0].get_variable(name)
 
-class DummyEnvironment:
+    def push_value(self, value: Value):
+        self.values.appendleft(value)
 
-    # Enclosing environment is needed to traverse a chain of environments
-    # TODO: Suggestion - wouldn't it be easier to implement it as a stack?
-    def __init__(self, enclosing=None):
-        self.values = {}
-        self.enclosing = enclosing
+    def pop_value(self):
+        return self.values.popleft()
 
-    def define(self, name, value):
-        """ Important! Assignment doesn't require a variable to be defined within the scope """
-        self.values[name] = value
+    def set_returned(self, fact, value=None):
+        self.returned = (fact, value)
 
-    def get_variable_or_function(self, name: str):
+    def reset_returned(self):
+        self.set_returned(fact=False, value=None)
 
-        if name in self.values.keys():
-            return self.values.get(name)
-        elif self.enclosing:
-            return self.enclosing.get_variable_or_function(name)
-        else:
-            raise RuntimeException(message=f"Undefined variable: {name}.")
+    def get_returned(self):
+        return self.returned
+
+    def release_scopes(self, n_scopes: int):
+        for i in range(n_scopes):
+            self.pop_scope()

@@ -4,7 +4,7 @@ from src.utils.program3.classes._class import Class
 from src.exceptions import RuntimeException
 from src.utils.program3.values.value import Value
 from src.utils.program3.functions.function import Function
-from src.utils.interpreter2_utils.scope import Scope
+from src.utils.interpreter_utils.scope import Scope
 from src.utils.program3.variable import Variable
 
 

@@ -8,13 +8,14 @@ from src.utils.program3.functions.function import Function
 from src.exceptions import ValidationException
 
 # TODO: Make proper validation
+from src.utils.program3.statements.statement import Statement
 from src.utils.visitor import Visitor
 
 class Program(Node):
 
     # TODO: At least one function
     # TODO: Add starting function field and adjust validation
-    def __init__(self, functions: List[Function], classes: List[Class] = []):
+    def __init__(self, functions: List[Function], classes: List[Class]=[], statements: List[Statement]=[]):
 
         if Program.validate_functions(functions):
             self.functions = functions
@@ -24,11 +25,18 @@ class Program(Node):
             self.classes = classes
             self.class_dict = {_class.identifier: _class for _class in classes}
 
+        if Program.validate_statements(statements):
+            self.statements = statements
+
     def get_functions(self):
         return self.function_dict
 
     def get_classes(self):
         return self.class_dict
+
+    @staticmethod
+    def validate_statements(statements: List[Statement]) -> bool:
+        return all([isinstance(statement, Statement) for statement in statements])
 
     @staticmethod
     def validate_functions(functions: List[Function]) -> bool:

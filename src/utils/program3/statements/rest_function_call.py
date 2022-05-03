@@ -1,6 +1,6 @@
 from src.utils.program3.node import Node
 from src.utils.program3.functions.arguments import Arguments
-from src.utils.visitor_old import Visitor
+from src.utils.visitor import Visitor
 
 
 class RestFunctionCall(Node):

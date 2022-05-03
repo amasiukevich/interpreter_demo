@@ -1,5 +1,5 @@
 from src.utils.program3.node import Node
-from src.utils.interpreter2_utils.call_utils import AbcFunction
+from src.utils.interpreter_utils.call_utils import AbcFunction
 from src.utils.program3.block import Block
 from src.utils.program3.functions.parameters import Parameters
 from src.utils.visitor import Visitor

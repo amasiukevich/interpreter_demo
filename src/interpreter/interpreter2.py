@@ -4,8 +4,8 @@ from typing import List, Tuple
 ### Program Tree
 from src.utils.program3.program import Program
 from src.utils.program3.functions.function import Function
-from ..utils.interpreter2_utils.call_utils import NativeFunction, AbcFunction
-from ..utils.interpreter2_utils.scope import Scope
+from ..utils.interpreter_utils.call_utils import NativeFunction, AbcFunction
+from ..utils.interpreter_utils.scope import Scope
 from ..utils.program3.block import Block
 from ..utils.program3.classes._class import Class
 from ..utils.program3.classes.class_block import ClassBlock
@@ -18,7 +18,7 @@ from ..utils.program3.expressions.math.relation_expression import RelationExpres
 from ..utils.program3.expressions.math.unary_expression import UnaryExpression
 from ..utils.program3.expressions.operators import PlusOperator, MinusOperator, MultiplyOperator, DivideOperator, \
     ModuloOperator, EqualityOperator, GreaterEqualOperator, GreaterOperator, LessOperator, LessEqualOperator, \
-    NotOperator, NotEqualOperator
+    NotOperator, NotEqualOperator, AndOperator, OrOperator
 from ..utils.program3.functions.arguments import Arguments
 from ..utils.program3.functions.parameters import Parameters
 from ..utils.program3.statements._return import Return
@@ -26,6 +26,7 @@ from ..utils.program3.statements.assign import Assign
 from ..utils.program3.statements.conditional import Conditional
 from ..utils.program3.statements.foreach_loop import ForeachLoop
 from ..utils.program3.statements.func_call import FunctionCall
+from ..utils.program3.statements.statement import Statement
 from ..utils.program3.statements.while_loop import WhileLoop
 from src.utils.program3.statements.complex_getter import ComplexGetter
 from ..utils.program3.values.iterative_getter import CallGetter, IdentifierGetter
@@ -37,14 +38,11 @@ from ..utils.program3.values.literals.null_literal import NullLiteral
 from ..utils.program3.values.literals.string_literal import StringLiteral
 from ..utils.program3.variable import Variable
 from ..utils.program3.statements.comment import Comment
-from ..utils.interpreter2_utils.instance import Instance
+from ..utils.interpreter_utils.instance import Instance
 
 from src.utils.visitor import Visitor
-from src.utils.interpreter2_utils.environment import Environment
+from src.utils.interpreter_utils.environment import Environment
 from src.exceptions import RuntimeException, ArithmeticException
-
-
-# TODO: rewrite iterative getter to support polymorphism (function_call, identifier, slicing_expr)
 
 
 class Interpreter(Visitor):
@@ -80,19 +78,15 @@ class Interpreter(Visitor):
             raise RuntimeException(message=f"{self.main_func_name} should have exactly 0 parameters "
                                            f"to be a starting function")
 
-        # TODO: moving all of the functions to the current environment
-
         # interpreting main
         main_function.accept(self)
 
     def visit_function(self, function: Function):
 
         function.block.accept(self)
-        # TODO: return stuff here
 
     def visit_class(self, _class: Class, constructor_params: List):
 
-        # TODO: Create the constructor recognizable
         instance = Instance(klass=_class)
         for value in constructor_params:
             instance.constructor_params.append(value)
@@ -126,15 +120,11 @@ class Interpreter(Visitor):
             statement.accept(self)
             if self.environment.get_returned()[0]:
                 return
-            # TODO: interrupt the block if returned
         self.environment.pop_scope()
 
     def visit_class_block(self, class_block: ClassBlock, instance: Instance):
 
         constructor = instance.klass.get_constructor()
-
-        # TODO: add here attributes
-        # TODO: add here rec_attributes
 
         def attributes(scope):
             attrs = []
@@ -202,20 +192,13 @@ class Interpreter(Visitor):
                 function = Variable(method.identifier, method)
                 instance.scope.add_variable(function)
 
-        # call constructor here
-        # TODO: Somewhere here is the error
+        # Calling the constructor
         args = [instance] + instance.constructor_params
         params = ['this'] + constructor.get_param_names()
         self.set_parameter_values(evaluated_args=args, param_names=params)
         constructor.accept(self)
         self.environment.set_returned(fact=True, value=instance)
         self.environment.pop_scope()
-
-    def visit_function_call(self, function_call):
-        pass
-
-    def visit_statement(self, statement):
-        pass
 
     def visit_native_function(self, native_function: NativeFunction, evaluated_args: List):
         val = native_function.call_func(*evaluated_args)
@@ -574,14 +557,6 @@ class Interpreter(Visitor):
     def visit_arguments(self, arguments: Arguments):
         return [arg.accept(self) for arg in arguments.arguments]
 
-    def visit_and_oper(self):
-        # No need to visit this
-        pass
-
-    def visit_or_oper(self):
-        # No need to visit this
-        pass
-
     def visit_negative_oper(self, neg_operator, value=None):
 
         if isinstance(value, IntLiteral):
@@ -599,4 +574,19 @@ class Interpreter(Visitor):
         self.environment.add_variable(variable)
 
     def visit_comment(self, comment: Comment):
+        pass
+
+    def visit_function_call(self, function_call: FunctionCall):
+        pass
+
+    def visit_statement(self, statement: Statement):
+        # No need to visit this
+        pass
+
+    def visit_and_oper(self, and_oper: AndOperator):
+        # No need to visit this
+        pass
+
+    def visit_or_oper(self, or_oper: OrOperator):
+        # No need to visit this
         pass
