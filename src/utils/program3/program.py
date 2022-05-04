@@ -15,6 +15,9 @@ class Program(Node):
 
     # TODO: At least one function
     # TODO: Add starting function field and adjust validation
+
+    # TODO: Remove the list - argument = dictionary
+    # TODO: Use add_function
     def __init__(self, functions: List[Function], classes: List[Class]=[], statements: List[Statement]=[]):
 
         if Program.validate_functions(functions):

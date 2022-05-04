@@ -7,5 +7,5 @@ main(a, b) {
 perform_calc() {
     a = 15;
     calculation = main(a, 15);
-    print(calculation);
+    print("Result of multiplication " + a + " by 15 is " + calculation);
 }

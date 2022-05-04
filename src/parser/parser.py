@@ -354,28 +354,6 @@ class Parser:
             else:
                 return IdentifierGetter(identifier=identifier)
 
-    # def parse_iterative_getter(self) -> Optional[IterativeGetter]:
-    #
-    #     if self.compare_token_types(TokenType.IDENTIFIER):
-    #
-    #         identifier = self.scanner.get_token().value
-    #         self.scanner.next_token()
-    #
-    #         rest_function_call = self.parse_rest_function_call()
-    #         slicing_expr = self.parse_slicing_expr()
-    #
-    #         return IterativeGetter(identifier, rest_function_call, slicing_expr)
-
-    # def parse_rest_function_call(self) -> Optional[RestFunctionCall]:
-    #
-    #     if self.compare_and_consume(TokenType.OPEN_PARENTHESIS):
-    #
-    #         arguments = self.parse_arguments()
-    #         self.must_be_token(TokenType.CLOSING_PARENTHESIS,
-    #                            f"Expected: {TokenType.CLOSING_PARENTHESIS}, got: {self.scanner.get_token().token_type}")
-    #
-    #         return RestFunctionCall(arguments)
-
     def parse_arguments(self) -> Optional[Arguments]:
 
         list_of_args = []

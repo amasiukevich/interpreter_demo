@@ -82,7 +82,6 @@ class Interpreter(Visitor):
         main_function.accept(self)
 
     def visit_function(self, function: Function):
-
         function.block.accept(self)
 
     def visit_class(self, _class: Class, constructor_params: List):
@@ -112,14 +111,11 @@ class Interpreter(Visitor):
 
     def visit_block(self, block: Block, scope=None):
 
-        if self.environment.get_returned()[0]:
-            return
-
         self.environment.push_scope(scope)
         for statement in block.get_statements():
             statement.accept(self)
             if self.environment.get_returned()[0]:
-                return
+                break
         self.environment.pop_scope()
 
     def visit_class_block(self, class_block: ClassBlock, instance: Instance):
@@ -224,11 +220,9 @@ class Interpreter(Visitor):
     def visit_while_loop(self, while_loop: WhileLoop):
 
         condition, body = while_loop.expression, while_loop.block
-        condition_value = condition.accept(self).value
-
-        while condition_value and not self.environment.get_returned()[0]:
+        # TODO: Tests
+        while (not self.environment.get_returned()[0]) and condition.accept(self).value:
             body.accept(self)
-            condition_value = condition.accept(self).value
 
     def visit_foreach_loop(self, foreach_loop: ForeachLoop):
 
@@ -239,7 +233,6 @@ class Interpreter(Visitor):
         if not isinstance(values_to_iterate, list):
             raise RuntimeException("Expression in foreach loop should evaluate to list")
 
-        # try:
         for i in range(len(values_to_iterate)):
 
             iterative_var = Variable(name=foreach_loop.identifier, value=values_to_iterate[i])
@@ -247,6 +240,8 @@ class Interpreter(Visitor):
             scope.add_variable(iterative_var)
 
             foreach_loop.block.accept(self, scope)
+            if self.environment.get_returned()[0]:
+                break
 
     def visit_conditional(self, conditional: Conditional):
 
@@ -468,7 +463,7 @@ class Interpreter(Visitor):
 
     def visit_complex_getter(self, complex_getter: ComplexGetter, is_assign: Tuple):
 
-        # TODO: Think about when to release scopes
+        # TODO: Adjust to only have one scope
         n_scopes_release = 0
         last_getter_idx = len(complex_getter.iterative_getters) - 1
         scope_to_push = None

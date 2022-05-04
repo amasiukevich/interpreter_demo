@@ -23,6 +23,5 @@ class Instance(Value):
         for method in self.klass.class_block.methods:
             self.scope.add_variable(Variable(name=method.identifier, value=method))
 
-
     def __repr__(self):
         return self.value

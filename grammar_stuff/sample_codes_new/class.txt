@@ -1,6 +1,6 @@
 class Person {
 
-    Person(this, name, age) {
+    Person(this, name, age, child) {
         this.name = name;
         this.age = age;
     }
@@ -8,6 +8,7 @@ class Person {
     get_name(this) {
         return this.name;
     }
+
 }
 
 class Pet {
@@ -41,4 +42,7 @@ main() {
 
     print(hannah.child.pet.get_name());
 
+    if hannah.has_attr("child") {
+        print(hannah.child.get_name());
+    }
 }

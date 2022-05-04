@@ -17,6 +17,6 @@ fibonacci(n) {
 }
 
 main() {
-    print(fibonacci(10));
-    print(factorial(5));
+    print(fibonacci(11));
+    print(factorial(6));
 }
