@@ -1,0 +1,5 @@
+define main() {
+    if true {}
+    else if false {}
+    else {}
+}

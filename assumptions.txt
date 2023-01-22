@@ -1,4 +1,0 @@
-1. Classes cannot contain fields. All the fields are deducted by the interpreter
-2. There doesn't exist function datatype. Functions can't be stored in a variable nor in collecion. (See basic_value_getter syntax in grammar).
-3. No break nor continue statements.
-4. Only integers are allowed as numeric data types (# TODO: add it in the future)

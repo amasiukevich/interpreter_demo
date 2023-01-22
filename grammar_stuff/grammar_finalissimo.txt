@@ -1,0 +1,130 @@
+program ::= declaration, {declaration};
+
+# In the IDLE mode there will be a function
+declaration ::= function_definition | class_definition | statement;
+
+function_definition ::= identifier, "(", parameters, ")", block;
+class_definition ::= "class", identifier, class_block;
+
+parameters ::= [ { this_kw | identifier }, { ",", identifier} ] ;
+block ::= "{", {statement}, "}" ;
+
+class_block ::= "{", {function_definition}, "}" ;
+
+statement ::=   conditional |
+                loop |
+                return |
+                assign |
+                function_call |
+                comment ;
+
+conditional ::= "if", or_expression, block,
+                { "else if", or_expression, block },
+                ["else", block] ;
+
+loop ::= foreach_loop | while_loop ;
+return ::= "return", {or_expression}, ";" ;
+comment ::= "#", comment_body;
+
+assign ::= complex_getter, "=", or_expression;
+function_call ::= complex_getter, ";" ;
+
+foreach_loop ::= "foreach", identifier, "in", or_expression, block;
+while_loop ::= "while", or_expression, block;
+
+# Expressions
+or_expression ::= and_expression, { or_oper, and_expression } ;
+and_expression ::= equality_expression, { and_oper, equality_expression };
+equality_expression ::= relation_expression, [ eq_oper, relation_expression ];
+relation_expression ::= add_expression, [ rel_oper, add_expression ];
+add_expression ::= mult_expression, { add_oper, mult_expression } ;
+mult_expression ::= unary_expression, { gen_mult_oper, unary_expression };
+unary_expression ::= [unary_oper], generalized_value;
+generalized_value ::= "(", or_expression, ")" | value ;
+
+
+# Value getting stuff
+complex_getter ::= basic_getter, {access_oper, iterative_getter} ;
+basic_getter ::= (this_kw | iterative_getter) ;
+iterative_getter ::= identifier, [rest_of_funct_call], ["[", add_expression ,"]"] ;
+rest_of_funct_call ::= "(", arguments, ")" ;
+arguments ::= { or_expression };
+
+
+this_kw ::= "this"
+comment_body ::= {special_char | string | number | other_char}, newline;
+
+identifier :== (underscore | dollar_sign | letter), {(letter | digit | underscore)} ;
+
+# Operators
+access_oper ::= "." ;
+or_oper ::= "||" ;
+and_oper ::= "&&" ;
+eq_oper ::= "==" |
+            "!=" ;
+rel_oper ::=    ">" |
+                "<" |
+                ">=" |
+                "<=" ;
+
+add_oper ::=    "+" |
+                "-" ;
+
+gen_mult_oper ::=   mult_oper |
+                    "%" ;
+
+mult_oper ::=   "*" |
+                "/" ;
+
+unary_oper ::=  neg_oper |
+                not_oper ;
+neg_oper ::= "-" ;
+not_oper ::= "!" ;
+
+value ::= literal | complex_getter ;
+
+# Literals
+
+literal ::= string |
+            number |
+            bool |
+            "null";
+
+string = "\"", {character}, "\"" ;
+
+character = ( letter | digit | special_char ) ;
+number = ( integer_part | float_number ) ;
+float_number = integer_part, ".", fractional_part ;
+
+integer_part ::=    non_zero_number |
+                    "0";
+fractional_part ::= digit, {digit} ;
+
+bool ::= "true" | "false" ;
+
+non_zero_number ::= non_zero_digit, {digit} ;
+digit ::=   non_zero_digit |
+            "0" ;
+non_zero_digit ::= '1' - '9' ;
+
+letter ::=  'A' - 'Z' |
+            'a' - 'z' ;
+
+special_char ::=    ":"  |
+                    ";"  |
+                    "\"" |
+                    "'"  |
+                    "-"  |
+                    "."  |
+                    ","  |
+                    "/"  |
+                    "\\" |
+                    "#"  |
+                    dollar_sign |
+                    underscore ;
+other_char ::=  " " |
+                "\t" ;
+
+dollar_sign ::= "$" ;
+newline ::= "\n" ;
+underscore ::=  "_" ;

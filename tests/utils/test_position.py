@@ -1,7 +1,8 @@
-from src.utils.position import Position
-from src.exceptions.position_exception import PositionException
-
 import unittest
+
+from src.exceptions.position_exception import PositionException
+from src.utils.position import Position
+
 
 class TestPosition(unittest.TestCase):
 

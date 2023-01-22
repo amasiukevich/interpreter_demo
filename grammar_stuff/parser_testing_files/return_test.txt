@@ -1,0 +1,7 @@
+define calc_total_price(item_price, tax) {
+	return item_price * (1 + tax) / 100;
+}
+
+define main() {
+	total_price = calc_total_price(1000, 10);
+}

@@ -1,9 +1,8 @@
-from .position import Position
-from .token_type import TokenType
+from src.utils import TokenType, Position
+
 
 class Token:
 
-    # TODO: add constants
     SPECIAL_CHARS = []
     MAX_IDENTIFIER_LENGTH = 120
     MAX_NUMBER = 2 ** 32
@@ -13,6 +12,9 @@ class Token:
         self.token_type = token_type
         self.position = position
         self.value = value
+
+    def get_token_type(self):
+        return self.token_type
     
     def __eq__(self, other):
         if not isinstance(other, Token):

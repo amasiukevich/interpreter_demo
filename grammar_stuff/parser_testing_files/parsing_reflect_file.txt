@@ -1,0 +1,6 @@
+define main() {
+    object = 2;
+
+
+    reflect recursive object;
+}

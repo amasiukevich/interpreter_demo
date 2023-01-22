@@ -1,0 +1,32 @@
+# Killer comment
+
+class Person {
+
+    Person(this, name, age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+
+main() {
+
+    david = Person("David", 85);
+    andy = Person("Andy", 45);
+    mike = Person("Mike", 15);
+    emily = Person("Emily", 18);
+
+    david.son = andy;
+    andy.son = mike;
+    andy.daughter = emily;
+
+    foreach attr in david.attributes() {
+        print(attr);
+    }
+
+    print();
+
+    foreach attr in david.rec_attributes() {
+        print(attr);
+    }
+}

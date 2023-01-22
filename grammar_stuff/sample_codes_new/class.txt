@@ -1,0 +1,48 @@
+class Person {
+
+    Person(this, name, age, child) {
+        this.name = name;
+        this.age = age;
+    }
+
+    get_name(this) {
+        return this.name;
+    }
+
+}
+
+class Pet {
+
+    Pet(this, name) {
+        this.name = name;
+    }
+
+    get_name(this) {
+        return this.name;
+    }
+}
+
+
+main() {
+
+    david = Person("David", 45);
+    hannah = Person("Hannah", 40);
+
+    sarah = Person("Sarah", 15);
+    andy = Person("Andy", 21);
+    gosha = Pet("Gosha");
+
+    david.child1 = sarah;
+    david.child2 = andy;
+
+    david.child1 = andy;
+
+    hannah.child = sarah;
+    sarah.pet = gosha;
+
+    print(hannah.child.pet.get_name());
+
+    if hannah.has_attr("child") {
+        print(hannah.child.get_name());
+    }
+}
